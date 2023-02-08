@@ -26,6 +26,11 @@ export default function LoginForm() {
     console.log("Log in btn on Login page was clicked");
   };
 
+  const handlePasswordVisibilityClick = () => {
+    console.log("Did someone call for an eye-con?")
+    setShowPassword(!showPassword);
+  }
+
   return (
     <>
       <Stack spacing={3}>
@@ -47,7 +52,7 @@ export default function LoginForm() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  onClick={(prevState) => setShowPassword(!prevState)}
+                  onClick={handlePasswordVisibilityClick}
                   edge="end"
                 >
                   {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
