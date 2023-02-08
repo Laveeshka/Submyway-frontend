@@ -101,5 +101,5 @@ export const theme = createTheme({
           hoverOpacity: 0.08,
           disabledOpacity: 0.48,
         },
-    }
+    },
 })
