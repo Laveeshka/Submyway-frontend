@@ -42,7 +42,7 @@ export default function LoginForm() {
           label="Password"
           type={showPassword ? "text" : "password"}
           value={password}
-          onChange={(e) => setPassword(e.targer.value)}
+          onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
