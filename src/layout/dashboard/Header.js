@@ -2,11 +2,12 @@
 import PropTypes from "prop-types";
 // @mui
 import { styled } from "@mui/material/styles";
-import { Box, Stack, AppBar, Toolbar, IconButton, Button } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 // utils
 import { bgBlur } from "../../utils/cssStyles";
-
+// navigation
+import { useNavigate } from "react-router-dom";
 // --------------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -42,6 +43,15 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+  const navigate = useNavigate();
+
+  const handleLoginButtonClick = (e) => {
+    console.log(`${e.target.innerText} was clicked`);
+    if (e.target.innerText === "LOG IN"){
+      navigate("/login");
+    }
+  }
+
   return (
     <StyledAppBar>
       <StyledToolbar>
@@ -55,7 +65,7 @@ export default function Header({ onOpenNav }) {
         >
           <MenuIcon />
         </IconButton>
-          <Button variant="contained" size="small">Log In</Button>
+          <Button variant="contained" size="small" onClick={handleLoginButtonClick}>LOG IN</Button>
       </StyledToolbar>
     </StyledAppBar>
   );
