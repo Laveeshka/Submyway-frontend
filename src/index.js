@@ -9,14 +9,22 @@ import "@fontsource/roboto/700.css";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme/theme";
+// redux
+import { Provider } from "react-redux";
+import { persistor, store } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <ThemeProvider theme={theme}>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </ThemeProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider theme={theme}>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </ThemeProvider>
+      </PersistGate>
+    </Provider>
   </BrowserRouter>
 );

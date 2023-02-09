@@ -1,60 +1,68 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import {
-  List,
-  ListItem,
   Link,
+  List,
   Stack,
   IconButton,
   InputAdornment,
   TextField,
   Button,
+  ListItem
 } from "@mui/material";
 // icons
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-// redux
+//redux
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/userSlice";
+import { registerUser } from "../../redux/userSlice";
+
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // retrieve actions and state
+  //navigation
+  const navigate = useNavigate();
+
+  //retrieve state from store
   const dispatch = useDispatch();
-  const errors = useSelector((state) => state.user.loginErrors);
+  const errors = useSelector((state) => state.user.registerErrors);
+
   const errorListItems = errors.map((error) => (
     <ListItem key={error}>{error}</ListItem>
   ));
 
-  // navigation
-  const navigate = useNavigate();
-
-  const handleLoginClick = async (e) => {
+  const handleRegisterClick = async (e) => {
     e.preventDefault();
-    console.log("Log in btn on Login page was clicked");
+    console.log("Register btn on Registration page was clicked");
+    const credentials = {
+      username: username,
+      password: password,
+      password_confirmation: passwordConfirmation,
+    };
 
-    const credentials = { username, password };
     try {
-      const resultAction = await dispatch(loginUser(credentials)).unwrap();
+      const resultAction = await dispatch(registerUser(credentials)).unwrap();
       if (resultAction.user) {
         setUsername("");
         setPassword("");
-        navigate("/dashboard");
+        setPasswordConfirmation("");
+        navigate("/login");
       }
     } catch (err) {}
   };
 
   const handlePasswordVisibilityClick = () => {
-    console.log("Did someone call for an eye-con?");
+    console.log("Did someone call for an eye-con?")
     setShowPassword(!showPassword);
-  };
+  }
 
   return (
     <>
@@ -76,7 +84,29 @@ export default function LoginForm() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={handlePasswordVisibilityClick} edge="end">
+                <IconButton
+                  onClick={handlePasswordVisibilityClick}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          name="password-confirmation"
+          label="Confirm Password"
+          type={showPassword ? "text" : "password"}
+          value={passwordConfirmation}
+          onChange={(e) => setPasswordConfirmation(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handlePasswordVisibilityClick}
+                  edge="end"
+                >
                   {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
               </InputAdornment>
@@ -90,19 +120,14 @@ export default function LoginForm() {
           variant="contained"
           size="large"
           type="submit"
-          onClick={handleLoginClick}
+          onClick={handleRegisterClick}
         >
-          Log in
+          Register
         </Button>
-        <Link
-          component={RouterLink}
-          variant="subtitle2"
-          underline="hover"
-          to="/register"
-        >
-          Don't have an account? Register here
+        <Link component={RouterLink} variant="subtitle2" underline="hover" to="/login">
+            Already have an account? Log in here
         </Link>
-        <List> {errorListItems}</List>
+        <List>{errorListItems}</List>
       </Stack>
     </>
   );

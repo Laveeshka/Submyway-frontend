@@ -8,6 +8,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { bgBlur } from "../../utils/cssStyles";
 // navigation
 import { useNavigate } from "react-router-dom";
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/userSlice";
+
 // --------------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -44,11 +48,16 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav }) {
   const navigate = useNavigate();
+  let isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
 
   const handleLoginButtonClick = (e) => {
     console.log(`${e.target.innerText} was clicked`);
     if (e.target.innerText === "LOG IN"){
       navigate("/login");
+    }
+    else {
+      dispatch(logoutUser());
     }
   }
 
@@ -65,7 +74,7 @@ export default function Header({ onOpenNav }) {
         >
           <MenuIcon />
         </IconButton>
-          <Button variant="contained" size="small" onClick={handleLoginButtonClick}>LOG IN</Button>
+          <Button variant="contained" size="small" onClick={handleLoginButtonClick}>{isLoggedIn ? "Log out" : "Log in"}</Button>
       </StyledToolbar>
     </StyledAppBar>
   );
