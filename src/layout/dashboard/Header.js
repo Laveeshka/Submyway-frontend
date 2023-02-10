@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/userSlice";
+import { clearOnLogout } from "../../redux/subscriptionsSlice";
 
 // --------------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export default function Header({ onOpenNav }) {
     }
     else {
       dispatch(logoutUser());
+      dispatch(clearOnLogout());
     }
   }
 
