@@ -4,9 +4,9 @@ import thunk from 'redux-thunk';
 import { combineReducers } from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-
-
 import userReducer from "./userSlice";
+import subscriptionsReducer from "./subscriptionsSlice";
+import companiesReducer from "./companiesSlice";
 
 const persistConfig = {
   key: 'root',
@@ -16,6 +16,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({ 
   user: userReducer,
+  companies: companiesReducer,
+  subscriptions: subscriptionsReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
