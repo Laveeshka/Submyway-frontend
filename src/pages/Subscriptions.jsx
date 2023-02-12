@@ -5,7 +5,23 @@ import { useDispatch, useSelector } from "react-redux";
 // navigation
 import { Navigate } from "react-router-dom";
 // @mui
-import { Container, Box, TableContainer, TableBody, Table, TableRow, Paper, TableCell, Checkbox, TablePagination} from "@mui/material";
+import {
+  Container,
+  Box,
+  TableContainer,
+  TableBody,
+  Table,
+  TableRow,
+  Paper,
+  TableCell,
+  Checkbox,
+  TablePagination,
+  Button,
+  Popover,
+  MenuItem,
+  IconButton
+} from "@mui/material";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 // components
 import SubscriptionsHeading from "../components/table/SubscriptionsHeading";
 import EnhancedTableHead from "../components/table/EnhanceTableHead";
@@ -16,32 +32,32 @@ import { subscriptionsData } from "../data/tableData";
 // --------------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === "desc"
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
     }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
-  
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-  
-  function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
-      }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
 
 // --------------------------------------------------------------------------
 
@@ -51,15 +67,28 @@ export default function Subscriptions() {
   let subscriptions = useSelector((state) => state.subscriptions.subscriptions);
   let rows = [];
 
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('company');
+  const [open, setOpen] = useState(null);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("company");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  // --------------------------------------------------------------------------
+    
+    const handleOpenMenu = (event) => {
+        setOpen(event.currentTarget);
+    }
+
+    const handleCloseMenu = () => {
+        setOpen(null);
+    }
+
+  // --------------------------------------------------------------------------
+
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -73,6 +102,7 @@ export default function Subscriptions() {
   };
 
   const handleClick = (event, id) => {
+    console.log("Row id is: ", id);
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -85,7 +115,7 @@ export default function Subscriptions() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -107,8 +137,7 @@ export default function Subscriptions() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-
-  if (subscriptions.length > 0){
+  if (subscriptions.length > 0) {
     rows = subscriptionsData(subscriptions);
     console.log("Rows are: ", rows);
   }
@@ -120,91 +149,128 @@ export default function Subscriptions() {
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
-<Container>
-<SubscriptionsHeading addSubscriptionClick={addSubscriptionClick} />
-<Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size='medium'
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <>
+    <Container>
+      <SubscriptionsHeading addSubscriptionClick={addSubscriptionClick} />
+      <Box sx={{ width: "100%" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size="medium"
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
                       >
-                        {row.company}
-                      </TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
-                      <TableCell align="left">{row.billing}</TableCell>
-                      <TableCell align="right">{row.price}</TableCell>
-                      <TableCell align="left">{row.nextPaymentDate}</TableCell>
-                      <TableCell align="left">{row.paid ? "Payment made" : "Awaiting payment"}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
-</Container>    
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            onClick={(event) => handleClick(event, row.id)}
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.company}
+                        </TableCell>
+                        <TableCell align="left">{row.status}</TableCell>
+                        <TableCell align="left">{row.billing}</TableCell>
+                        <TableCell align="right">{row.price}</TableCell>
+                        <TableCell align="left">
+                          {row.nextPaymentDate}
+                        </TableCell>
+                        <TableCell align="left">
+                          {row.paid ? (
+                            "Payment made"
+                          ) : (
+                            <Button variant="outlined" size="small">
+                              I have paid
+                            </Button>
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                            <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                                <MoreVertIcon />
+                            </IconButton>
+                     </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: 53 * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
+    </Container>
 
+    <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+            sx: {
+                p: 1,
+                width: 140,
+                '& .MuiMenuItem-root': {
+                    px: 1,
+                    typography: 'body2',
+                    borderRadius: 0.75
+                }
+            }
+        }}>
+        <MenuItem>Edit</MenuItem>
+        <MenuItem>Delete</MenuItem>
+    </Popover>
+    </>
   );
 }

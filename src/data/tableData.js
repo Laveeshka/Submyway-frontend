@@ -64,4 +64,9 @@ export const headCells = [
         disablePadding: false,
         label: "Paid?"
     },
+    {
+        id: '',
+        numeric: false,
+        disablePadding: true
+    }
 ]
