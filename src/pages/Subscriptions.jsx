@@ -174,6 +174,7 @@ export default function Subscriptions() {
                         {row.company}
                       </TableCell>
                       <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">{row.billing}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
                       <TableCell align="left">{row.nextPaymentDate}</TableCell>
                       <TableCell align="left">{row.paid ? "Payment made" : "Awaiting payment"}</TableCell>
