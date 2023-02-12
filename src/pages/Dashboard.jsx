@@ -15,17 +15,17 @@ export default function Dashboard(){
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     // useEffect here
-    useEffect(() => {
-        if (token.length > 1) {
-            try {
-                const resultAction = dispatch(autoLoginUser(token)).unwrap();
-              } catch (err) {
-                console.warn(err);
-              }
-        } else {
-            console.log('No token found, try logging in!');
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (token.length > 1) {
+    //         try {
+    //             const resultAction = dispatch(autoLoginUser(token)).unwrap();
+    //           } catch (err) {
+    //             console.warn(err);
+    //           }
+    //     } else {
+    //         console.log('No token found, try logging in!');
+    //     }
+    // }, [])
 
     if (!isLoggedIn) return <Navigate to="/login"/>
 
