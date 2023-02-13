@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
+import { createNewPayment } from "../redux/subscriptionsSlice";
 // navigation
 import { Navigate } from "react-router-dom";
 // @mui
@@ -63,7 +64,9 @@ function stableSort(array, comparator) {
 
 export default function Subscriptions() {
   // retrieve state and actions from store
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const token = useSelector((state) => state.user.token);
   let subscriptions = useSelector((state) => state.subscriptions.subscriptions);
   let rows = [];
 
@@ -73,11 +76,14 @@ export default function Subscriptions() {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [idForEditOrDelete, setIdForEditOrDelete] = useState(null);
 
   // --------------------------------------------------------------------------
     
-    const handleOpenMenu = (event) => {
+    const handleOpenMenu = (event, id) => {
+        console.log("Current target is: ", event.currentTarget);
         setOpen(event.currentTarget);
+        setIdForEditOrDelete(id);
     }
 
     const handleCloseMenu = () => {
@@ -121,6 +127,16 @@ export default function Subscriptions() {
 
     setSelected(newSelected);
   };
+
+  const handleNewPaymentClick = (event, id) => {
+    console.log("Row id is: ", id);
+    const params = { token, id }
+    try {
+        const resultAction = dispatch(createNewPayment(params)).unwrap();
+      } catch (err) {
+        console.warn(err);
+      }
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -213,13 +229,13 @@ export default function Subscriptions() {
                           {row.paid ? (
                             "Payment made"
                           ) : (
-                            <Button variant="outlined" size="small">
+                            <Button variant="outlined" size="small" onClick={(event) => handleNewPaymentClick(event, row.id)}>
                               I have paid
                             </Button>
                           )}
                         </TableCell>
                         <TableCell align="right">
-                            <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                            <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, row.id)}>
                                 <MoreVertIcon />
                             </IconButton>
                      </TableCell>
@@ -268,7 +284,7 @@ export default function Subscriptions() {
                 }
             }
         }}>
-        <MenuItem>Edit</MenuItem>
+        <MenuItem onClick={console.log(`Row id for edit is ${idForEditOrDelete}`)}>Edit</MenuItem>
         <MenuItem>Delete</MenuItem>
     </Popover>
     </>

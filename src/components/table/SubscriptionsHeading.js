@@ -13,8 +13,8 @@ SubscriptionsHeading.propTypes = {
 
 export default function SubscriptionsHeading({ addSubscriptionClick }) {
   return (
-    <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Subscription</Typography>
+    <Stack direction="row" alignItems="center" justifyContent="flex-start" mb={5}>
+        {/* <Typography variant="h4">Subscription</Typography> */}
         <Button variant="contained" startIcon={<AddIcon />} onClick={addSubscriptionClick}>New Subscription</Button>
     </Stack>
   )

@@ -38,6 +38,7 @@ export default function EnhancedTableToolbar(props) {
           color="inherit"
           variant="subtitle1"
           component="div"
+          align="left"
         >
           {numSelected} selected
         </Typography>
@@ -47,8 +48,9 @@ export default function EnhancedTableToolbar(props) {
           variant="h6"
           id="tableTitle"
           component="div"
+          align="left"
         >
-          
+          Subscriptions
         </Typography>
       )}
 
