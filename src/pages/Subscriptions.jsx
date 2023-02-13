@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { createNewPayment } from "../redux/subscriptionsSlice";
+import { createNewPayment, deleteSubscription } from "../redux/subscriptionsSlice";
 // navigation
 import { Navigate } from "react-router-dom";
 // @mui
@@ -128,16 +128,6 @@ export default function Subscriptions() {
     setSelected(newSelected);
   };
 
-  const handleNewPaymentClick = (event, id) => {
-    console.log("Row id is: ", id);
-    const params = { token, id }
-    try {
-        const resultAction = dispatch(createNewPayment(params)).unwrap();
-      } catch (err) {
-        console.warn(err);
-      }
-  }
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -158,9 +148,34 @@ export default function Subscriptions() {
     console.log("Rows are: ", rows);
   }
 
+  // --------------------------------------------------------------------------
+
   const addSubscriptionClick = () => {
     console.log("Add sub button was clicked!");
   };
+
+  const handleNewPaymentClick = (event, id) => {
+    console.log("Row id is: ", id);
+    const params = { token, id };
+    try {
+        const resultAction = dispatch(createNewPayment(params)).unwrap();
+      } catch (err) {
+        console.warn(err);
+      }
+  }
+
+  const handleDeleteSubClick = async (event, id) => {
+    console.log("Row id to be deleted is: ", id);
+    const params = { token, id };
+    try {
+        const resultAction = await dispatch(deleteSubscription(params)).unwrap();
+        if (resultAction.data.message){
+            handleCloseMenu();
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+  }
 
   if (!isLoggedIn) return <Navigate to="/login" />;
 
@@ -284,8 +299,8 @@ export default function Subscriptions() {
                 }
             }
         }}>
-        <MenuItem onClick={console.log(`Row id for edit is ${idForEditOrDelete}`)}>Edit</MenuItem>
-        <MenuItem>Delete</MenuItem>
+        <MenuItem>Edit</MenuItem>
+        <MenuItem onClick={(event) => handleDeleteSubClick(event, idForEditOrDelete)}>Delete</MenuItem>
     </Popover>
     </>
   );

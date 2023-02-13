@@ -1,3 +1,4 @@
+import { create } from "@mui/material/styles/createTransitions";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getSubscriptions = createAsyncThunk("subscriptions/get", 
@@ -40,6 +41,26 @@ export const createNewPayment =  createAsyncThunk("subscriptions/new_payment",
     }
 );
 
+export const deleteSubscription = createAsyncThunk("subscriptions/delete",
+    async(params, { rejectWithValue }) => {
+        const { token, id } = params;
+        try {
+            const res = await fetch (`/subscriptions/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            const data = await res.json();
+            return {data, id};
+        }
+        catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
 const subscriptionsSlice = createSlice({
     name: "subscriptions",
     initialState : {
@@ -63,6 +84,7 @@ const subscriptionsSlice = createSlice({
         },
         [getSubscriptions.rejected](state, action){
             console.log(action.payload);
+            state.status = "idle";
         },
         [createNewPayment.pending](state){
             state.status = "loading";
@@ -76,10 +98,31 @@ const subscriptionsSlice = createSlice({
                 else 
                 return sub;
             });
-            state.status = "idle"
+            state.status = "idle";
         },
         [createNewPayment.rejected](state, action){
             console.log(action.payload);
+            state.status = "idle";
+        },
+        [deleteSubscription.pending](state){
+            state.status = "loading";
+        },
+        [deleteSubscription.fulfilled](state, action){
+            if (action.payload.data.message){
+                console.log(action.payload.data);
+                const id = action.payload.id;
+                console.log(id);
+                state.subscriptions = state.subscriptions.filter((sub) => {
+                    if (sub.id !== id) {
+                        return sub;
+                    } 
+                });
+            }
+            state.status = "idle";
+        },
+        [deleteSubscription.rejected](state, action){
+            console.log(action.payload);
+            state.status = "idle";
         }
     }
 })
