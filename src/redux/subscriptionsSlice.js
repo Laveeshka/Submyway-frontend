@@ -1,4 +1,3 @@
-import { create } from "@mui/material/styles/createTransitions";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getSubscriptions = createAsyncThunk("subscriptions/get", 
@@ -12,7 +11,7 @@ export const getSubscriptions = createAsyncThunk("subscriptions/get",
                 }
             })
             const data = await res.json();
-            console.log("Data from GET subscriptions request is: ", data);
+            //console.log("Data from GET subscriptions request is: ", data);
             return data;
         }
         catch (err) {
@@ -32,7 +31,7 @@ export const createNewPayment =  createAsyncThunk("subscriptions/new_payment",
                 }
             })
             const data = await res.json();
-            console.log("Data from GET sub with next payment is: ", data);
+            //console.log("Data from GET sub with next payment is: ", data);
             return data;
         }
         catch (err) {
@@ -83,7 +82,7 @@ const subscriptionsSlice = createSlice({
             state.status = "idle";
         },
         [getSubscriptions.rejected](state, action){
-            console.log(action.payload);
+            //console.log(action.payload);
             state.status = "idle";
         },
         [createNewPayment.pending](state){
@@ -109,9 +108,9 @@ const subscriptionsSlice = createSlice({
         },
         [deleteSubscription.fulfilled](state, action){
             if (action.payload.data.message){
-                console.log(action.payload.data);
+                //console.log(action.payload.data);
                 const id = action.payload.id;
-                console.log(id);
+                //console.log(id);
                 state.subscriptions = state.subscriptions.filter((sub) => {
                     if (sub.id !== id) {
                         return sub;
@@ -121,7 +120,7 @@ const subscriptionsSlice = createSlice({
             state.status = "idle";
         },
         [deleteSubscription.rejected](state, action){
-            console.log(action.payload);
+            //console.log(action.payload);
             state.status = "idle";
         }
     }

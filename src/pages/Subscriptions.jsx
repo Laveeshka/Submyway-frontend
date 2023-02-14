@@ -73,7 +73,7 @@ export default function Subscriptions() {
   const [open, setOpen] = useState(null);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("company");
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([]); // array of row ids selected
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [idForEditOrDelete, setIdForEditOrDelete] = useState(null);
@@ -81,7 +81,7 @@ export default function Subscriptions() {
   // --------------------------------------------------------------------------
     
     const handleOpenMenu = (event, id) => {
-        console.log("Current target is: ", event.currentTarget);
+        //console.log("Current target is: ", event.currentTarget);
         setOpen(event.currentTarget);
         setIdForEditOrDelete(id);
     }
@@ -108,7 +108,7 @@ export default function Subscriptions() {
   };
 
   const handleClick = (event, id) => {
-    console.log("Row id is: ", id);
+    //console.log("Row id is: ", id);
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -145,7 +145,7 @@ export default function Subscriptions() {
 
   if (subscriptions.length > 0) {
     rows = subscriptionsData(subscriptions);
-    console.log("Rows are: ", rows);
+    //console.log("Rows are: ", rows);
   }
 
   // --------------------------------------------------------------------------
@@ -155,7 +155,7 @@ export default function Subscriptions() {
   };
 
   const handleNewPaymentClick = (event, id) => {
-    console.log("Row id is: ", id);
+    //console.log("Row id is: ", id);
     const params = { token, id };
     try {
         const resultAction = dispatch(createNewPayment(params)).unwrap();
@@ -165,7 +165,7 @@ export default function Subscriptions() {
   }
 
   const handleDeleteSubClick = async (event, id) => {
-    console.log("Row id to be deleted is: ", id);
+    //console.log("Row id to be deleted is: ", id);
     const params = { token, id };
     try {
         const resultAction = await dispatch(deleteSubscription(params)).unwrap();
