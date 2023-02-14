@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewPayment, deleteSubscription } from "../redux/subscriptionsSlice";
 // navigation
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 // @mui
 import {
   Container,
@@ -69,6 +69,7 @@ export default function Subscriptions() {
   const token = useSelector((state) => state.user.token);
   let subscriptions = useSelector((state) => state.subscriptions.subscriptions);
   let rows = [];
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
   const [order, setOrder] = useState("asc");
@@ -152,6 +153,7 @@ export default function Subscriptions() {
 
   const addSubscriptionClick = () => {
     console.log("Add sub button was clicked!");
+    navigate("create");
   };
 
   const handleNewPaymentClick = (event, id) => {
@@ -245,7 +247,7 @@ export default function Subscriptions() {
                             "Payment made"
                           ) : (
                             <Button variant="outlined" size="small" onClick={(event) => handleNewPaymentClick(event, row.id)}>
-                              I have paid
+                              Pay Now
                             </Button>
                           )}
                         </TableCell>

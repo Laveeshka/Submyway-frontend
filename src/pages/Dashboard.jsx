@@ -11,6 +11,8 @@ import SummaryCard from '../components/dashboard/SummaryCard';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { calculateMonthlyCost } from "../utils/calculateMonthlyCost";
+import { calculateYearlyCost } from "../utils/calculateYearlyCost";
 // --------------------------------------------------------------------------
 
 export default function Dashboard(){
@@ -21,52 +23,6 @@ export default function Dashboard(){
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const user = useSelector((state) => state.user.user);
     const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
-
-    const calculateMonthlyCost = () => {
-        let subCost = 0;
-        if (subscriptions.length > 0){
-            subscriptions.forEach((sub) => {
-                const billing = sub.billing;
-                switch (billing) {
-                    case "weekly":
-                        subCost += (sub.pricing * 4)
-                        break;
-                    case "monthly":
-                        subCost += sub.pricing
-                        break;
-                    case "yearly":
-                        subCost += (sub.pricing / 12)
-                        break;
-                    default:
-                        break;
-                } 
-            })
-            return subCost;
-        } else return subCost;
-    };
-
-    const calculateYearlyCost = () => {
-        let subCost = 0;
-        if (subscriptions.length > 0){
-            subscriptions.forEach((sub) => {
-                const billing = sub.billing;
-                switch (billing) {
-                    case "weekly":
-                        subCost += (sub.pricing * 4 * 12)
-                        break;
-                    case "monthly":
-                        subCost += (sub.pricing * 12)
-                        break;
-                    case "yearly":
-                        subCost += sub.pricing
-                        break;
-                    default:
-                        break;
-                } 
-            })
-            return subCost;
-        } else return subCost;
-    };
 
     if (!isLoggedIn) return <Navigate to="/login"/>
 
@@ -81,10 +37,10 @@ export default function Dashboard(){
                     <SummaryCard icon={<LoyaltyIcon />} title="Total Subscriptions" total={subscriptions.length} color="primary"/>
                 </Grid>
                 <Grid item xs={12} md={6} xl={4}>
-                    <SummaryCard icon={<CalendarMonthIcon />} title="Total Monthly Costs" total={`${calculateMonthlyCost()} AUD`} color="warning"/>
+                    <SummaryCard icon={<CalendarMonthIcon />} title="Total Monthly Costs" total={`${calculateMonthlyCost(subscriptions)} AUD`} color="warning"/>
                 </Grid>
                 <Grid item xs={12} md={6} xl={4}>
-                    <SummaryCard icon={<AttachMoneyIcon />} title="Total Yearly Costs" total={`${calculateYearlyCost()} AUD`} color="error"/>
+                    <SummaryCard icon={<AttachMoneyIcon />} title="Total Yearly Costs" total={`${calculateYearlyCost(subscriptions)} AUD`} color="error"/>
                 </Grid>
             </Grid>
         </Container>

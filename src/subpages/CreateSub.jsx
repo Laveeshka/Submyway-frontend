@@ -2,7 +2,8 @@
 import { useSelector } from "react-redux"
 // navigation
 import { Navigate } from "react-router-dom";
-
+// components
+import StepForm from "../components/stepform/StepForm";
 // --------------------------------------------------------------------------
 
 export default function CreateSub(){
@@ -13,6 +14,6 @@ export default function CreateSub(){
     if (!isLoggedIn) return <Navigate to="/login"/>
 
     return(
-        <div>Create Subscriptionshere</div>
+        <StepForm />
     )
 }
