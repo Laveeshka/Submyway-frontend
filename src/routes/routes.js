@@ -8,6 +8,8 @@ import Companies from "../pages/Companies";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound404 from "../pages/NotFound404";
+import CreateSub from "../subpages/CreateSub";
+import EditSub from "../subpages/EditSub";
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +21,11 @@ export default function Router() {
             children: [
                 {element: <Navigate to="dashboard" />, index: true},
                 {path: "dashboard", element: <Dashboard />},
-                {path: "subscriptions", element: <Subscriptions />},
+                {path: "subscriptions", children: [
+                    {element: <Subscriptions/>, index: true},
+                    {path: "create", element: <CreateSub />},
+                    {path: "edit", element: <EditSub />}
+                ]},
                 {path: "companies", element: <Companies />}
             ]
         },
