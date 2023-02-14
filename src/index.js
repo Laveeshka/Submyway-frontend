@@ -9,6 +9,7 @@ import "@fontsource/roboto/700.css";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme/theme";
+import CssBaseline from '@mui/material/CssBaseline';
 // redux
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
@@ -21,6 +22,7 @@ root.render(
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider theme={theme}>
           <React.StrictMode>
+            <CssBaseline />
             <App />
           </React.StrictMode>
         </ThemeProvider>
