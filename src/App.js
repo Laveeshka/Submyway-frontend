@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { getSubscriptions } from "./redux/subscriptionsSlice";
-
+import { getCompanies } from './redux/companiesSlice';
 
 function App() {
 
@@ -19,8 +19,8 @@ function App() {
   useEffect(() => {
     if (isLoggedIn){
       try {
-        const resultAction = dispatch(getSubscriptions(token)).unwrap();
-        //console.log("Fetched subscriptions data in Subscriptions page is: ", resultAction);
+        dispatch(getSubscriptions(token)).unwrap();
+        dispatch(getCompanies(token)).unwrap();
       } catch (err) {
         console.warn(err);
       }
