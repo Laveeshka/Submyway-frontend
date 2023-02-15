@@ -179,6 +179,10 @@ export default function Subscriptions() {
       }
   }
 
+  const handleEditSubClick = (event, id) => {
+    navigate(`edit/${id}`);
+  }
+
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
@@ -301,7 +305,7 @@ export default function Subscriptions() {
                 }
             }
         }}>
-        <MenuItem>Edit</MenuItem>
+        <MenuItem onClick={(event) => handleEditSubClick(event, idForEditOrDelete)}>Edit</MenuItem>
         <MenuItem onClick={(event) => handleDeleteSubClick(event, idForEditOrDelete)}>Delete</MenuItem>
     </Popover>
     </>

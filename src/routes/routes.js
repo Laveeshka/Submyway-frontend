@@ -24,7 +24,7 @@ export default function Router() {
                 {path: "subscriptions", children: [
                     {element: <Subscriptions/>, index: true},
                     {path: "create", element: <CreateSub />},
-                    {path: "edit", element: <EditSub />}
+                    {path: "edit/:id", element: <EditSub />}
                 ]},
                 {path: "companies", element: <Companies />}
             ]
