@@ -20,9 +20,13 @@ import ReviewForm from "./ReviewForm";
 // useState
 import { useState } from "react";
 // redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { postSubscription } from "../../redux/subscriptionsSlice";
+// date
 import parse from "date-fns/parse";
 import { format } from "date-fns";
+// navigation
+import { useNavigate } from "react-router-dom";
 
 // --------------------------------------------------------------------------
 
@@ -32,10 +36,14 @@ const cycles = ["weekly", "monthly", "yearly"];
 // --------------------------------------------------------------------------
 
 export default function StepForm() {
+  //navigate obj
+  const navigate = useNavigate();
   // retrieve theme
   const theme = useTheme();
   //retrieve state and actions from store
   const companies = useSelector((state) => state.companies.companies);
+  const token = useSelector((state) => state.user.token);
+  const dispatch = useDispatch();
 
   const [activeStep, setActiveStep] = useState(0);
   // states for form inputs
@@ -99,7 +107,7 @@ export default function StepForm() {
     setActiveStep((prev) => ++prev);
   };
 
-  const handleCreateClick = () => {
+  const handleCreateClick = async () => {
     const errs = [];
     setErrors([]);
     console.log("Create button was clicked");
@@ -119,21 +127,45 @@ export default function StepForm() {
     }
     setErrors(errs);
     //fire the dispatch action here
-    if (errors.length === 0){
-        console.log("Okay for POST request");
-        const companyObj = companies.find((val) => val.name === company);
-        const companyId = companyObj.id;
-        const newSub = {
-            company_id: companyId,
-            start_date: startDate.toISOString(),
-            active,
-            pricing: price,
-            frequency: 1,
-            billing
+    if (errors.length === 0) {
+      console.log("Okay for POST request");
+      const companyObj = companies.find((val) => val.name === company);
+      const companyId = companyObj.id;
+      const newSub = {
+        company_id: companyId,
+        start_date: startDate.toISOString(),
+        status: active,
+        pricing: price,
+        frequency: 1,
+        billing,
+      };
+      console.log(newSub);
+      const params = { token, newSub };
+      try {
+        const resultAction = await dispatch(postSubscription(params)).unwrap();
+        console.log(resultAction);
+        if (resultAction.id) {
+          console.log("works");
+          setActiveStep((prev) => ++prev);
         }
-        console.log(newSub);
+      } catch (err) {
+        console.warn(err);
+      }
     }
   };
+
+  const handleViewSubscriptionsClick = () => {
+    navigate("/subscriptions");
+  }
+
+  const handleCreateAnotherClick = () => {
+    setActiveStep(0);
+    setCompany("");
+    setPrice(0);
+    setActive(true);
+    setBilling(cycles[0]);
+    setStartDate(new Date());
+  }
 
   return (
     <Container component="form" maxWidth="lg" sx={{ mb: 4 }}>
@@ -164,12 +196,14 @@ export default function StepForm() {
               sx={{ mt: 6 }}
             >
               <Button
+                onClick={handleViewSubscriptionsClick}
                 variant="contained"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 View Subscriptions
               </Button>
               <Button
+                onClick={handleCreateAnotherClick}
                 variant="text"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
@@ -185,7 +219,7 @@ export default function StepForm() {
                   sx={{
                     color: (theme) => theme.palette["error"].main,
                     display: "list-item",
-                    typography: "subtitle2"
+                    typography: "subtitle2",
                   }}
                   key={err}
                 >

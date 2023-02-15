@@ -60,6 +60,30 @@ export const deleteSubscription = createAsyncThunk("subscriptions/delete",
     }
 );
 
+export const postSubscription = createAsyncThunk("subscriptions/create",
+    async(params, { rejectWithValue }) => {
+        const { token, newSub } = params;
+        try {
+            const res = await fetch("/subscriptions", {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                body: JSON.stringify(newSub)
+            }
+            )
+            const data = await res.json();
+            console.log("Data from POST subscriptions request is: ", data);
+            return data;
+        }
+        catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+)
+
 const subscriptionsSlice = createSlice({
     name: "subscriptions",
     initialState : {
@@ -82,7 +106,7 @@ const subscriptionsSlice = createSlice({
             state.status = "idle";
         },
         [getSubscriptions.rejected](state, action){
-            //console.log(action.payload);
+            console.log(action.payload);
             state.status = "idle";
         },
         [createNewPayment.pending](state){
@@ -120,7 +144,20 @@ const subscriptionsSlice = createSlice({
             state.status = "idle";
         },
         [deleteSubscription.rejected](state, action){
-            //console.log(action.payload);
+            console.log(action.payload);
+            state.status = "idle";
+        },
+        [postSubscription.pending](state){
+            state.status = "loading";
+        },
+        [postSubscription.fulfilled](state, action){
+            if (action.payload.id){
+               state.subscriptions.push(action.payload)
+            }
+            state.status = "idle";
+        },
+        [postSubscription.rejected](state, action){
+            console.log(action.payload);
             state.status = "idle";
         }
     }
