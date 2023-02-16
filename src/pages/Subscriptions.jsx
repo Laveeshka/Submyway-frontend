@@ -31,8 +31,10 @@ import SubscriptionsHeading from "../components/table/SubscriptionsHeading";
 import EnhancedTableHead from "../components/table/EnhanceTableHead";
 import EnhancedTableToolbar from "../components/table/EnhancedTableToolbar";
 import EmptySubscriptionsContainer from "../components/emptyState/subscriptions";
+import ConfirmationDialog from "../components/dialog/ConfirmationDialog";
 // data
 import { subscriptionsData } from "../data/tableData";
+import { set } from "date-fns";
 
 // --------------------------------------------------------------------------
 
@@ -76,6 +78,7 @@ export default function Subscriptions() {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("company");
   const [selected, setSelected] = useState([]); // array of row ids selected
@@ -94,6 +97,18 @@ export default function Subscriptions() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
+  // --------------------------------------------------------------------------
+
+  const handleClickOpenDialog = (event, id) => {
+    setIdForEditOrDelete(id);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
 
   // --------------------------------------------------------------------------
 
@@ -160,8 +175,9 @@ export default function Subscriptions() {
     navigate("create");
   };
 
-  const handleNewPaymentClick = (event, id) => {
-    //console.log("Row id is: ", id);
+  const handleNewPaymentClick = () => {
+    setOpenDialog(false);
+    const id = idForEditOrDelete;
     const params = { token, id };
     try {
       const resultAction = dispatch(createNewPayment(params)).unwrap();
@@ -264,10 +280,10 @@ export default function Subscriptions() {
                                   variant="outlined"
                                   size="small"
                                   onClick={(event) =>
-                                    handleNewPaymentClick(event, row.id)
+                                    handleClickOpenDialog(event, row.id)
                                   }
                                 >
-                                  Pay Now
+                                  Mark as paid
                                 </Button>
                               )}
                             </TableCell>
@@ -340,6 +356,7 @@ export default function Subscriptions() {
           Delete
         </MenuItem>
       </Popover>
+      <ConfirmationDialog open={openDialog} title="Mark this billing cycle as paid?" content="By clicking Confirm, you will roll over to the next billing cycle" handleCloseDialog={handleCloseDialog} handleNextPayment={handleNewPaymentClick}/>
     </>
   );
 }
