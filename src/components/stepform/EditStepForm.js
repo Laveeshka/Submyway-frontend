@@ -21,10 +21,9 @@ import ReviewForm from "./ReviewForm";
 import { useState } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { postSubscription } from "../../redux/subscriptionsSlice";
+import { patchSubscription } from "../../redux/subscriptionsSlice";
 // date
-import parse from "date-fns/parse";
-import { format } from "date-fns";
+import parseISO from "date-fns/parseISO";
 // navigation
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +34,7 @@ const cycles = ["weekly", "monthly", "yearly"];
 
 // --------------------------------------------------------------------------
 
-export default function EditStepForm() {
+export default function EditStepForm({ subscription }) {
   //navigate obj
   const navigate = useNavigate();
   // retrieve theme
@@ -47,11 +46,11 @@ export default function EditStepForm() {
 
   const [activeStep, setActiveStep] = useState(0);
   // states for form inputs
-  const [company, setCompany] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [active, setActive] = useState(true);
-  const [price, setPrice] = useState(0);
-  const [billing, setBilling] = useState(cycles[0]);
+  const [company, setCompany] = useState(subscription.company.name);
+  const [startDate, setStartDate] = useState(parseISO(subscription.start_date));
+  const [active, setActive] = useState(subscription.status);
+  const [price, setPrice] = useState(subscription.pricing);
+  const [billing, setBilling] = useState(subscription.billing);
   const [errors, setErrors] = useState([]);
 
   // --------------------------------------------------------------------------
@@ -107,7 +106,7 @@ export default function EditStepForm() {
     setActiveStep((prev) => ++prev);
   };
 
-  const handleCreateClick = async () => {
+  const handleEditClick = async () => {
     const errs = [];
     setErrors([]);
     console.log("Create button was clicked");
@@ -117,21 +116,21 @@ export default function EditStepForm() {
     if (price <= 0) {
       errs.push("The price cannot be a zero or negative value");
     }
-    const startDateInString = format(startDate, "dd MMM yyyy");
-    const parsedStartDate = parse(startDateInString, "dd MMM yyyy", startDate);
-    const todayInString = format(new Date(), "dd MMM yyyy");
-    const parsedToday = parse(todayInString, "dd MMM yyyy", new Date());
+    // const startDateInString = format(startDate, "dd MMM yyyy");
+    // const parsedStartDate = parse(startDateInString, "dd MMM yyyy", startDate);
+    // const todayInString = format(new Date(), "dd MMM yyyy");
+    // const parsedToday = parse(todayInString, "dd MMM yyyy", new Date());
 
-    if (parsedStartDate < parsedToday) {
-      errs.push("Start date cannot be in the past");
-    }
+    // if (parsedStartDate < parsedToday) {
+    //   errs.push("Start date cannot be in the past");
+    // }
     setErrors(errs);
     //fire the dispatch action here
     if (errors.length === 0) {
-      console.log("Okay for POST request");
+      console.log("Okay for PATCH request");
       const companyObj = companies.find((val) => val.name === company);
       const companyId = companyObj.id;
-      const newSub = {
+      const sub = {
         company_id: companyId,
         start_date: startDate.toISOString(),
         status: active,
@@ -139,10 +138,11 @@ export default function EditStepForm() {
         frequency: 1,
         billing,
       };
-      console.log(newSub);
-      const params = { token, newSub };
+      console.log(sub);
+      const subId = subscription.id;
+      const params = { token, sub, subId };
       try {
-        const resultAction = await dispatch(postSubscription(params)).unwrap();
+        const resultAction = await dispatch(patchSubscription(params)).unwrap();
         console.log(resultAction);
         if (resultAction.id) {
           console.log("works");
@@ -158,14 +158,14 @@ export default function EditStepForm() {
     navigate("/subscriptions");
   }
 
-  const handleCreateAnotherClick = () => {
-    setActiveStep(0);
-    setCompany("");
-    setPrice(0);
-    setActive(true);
-    setBilling(cycles[0]);
-    setStartDate(new Date());
-  }
+  // const handleCreateAnotherClick = () => {
+  //   setActiveStep(0);
+  //   setCompany("");
+  //   setPrice(0);
+  //   setActive(true);
+  //   setBilling(cycles[0]);
+  //   setStartDate(new Date());
+  // }
 
   return (
     <Container component="form" maxWidth="lg" sx={{ mb: 4 }}>
@@ -174,7 +174,7 @@ export default function EditStepForm() {
         sx={{ my: { xs: 3, md: 6, lg: 9 }, p: { xs: 2, md: 3, lg: 4 } }}
       >
         <Typography variant="h4" align="center">
-          Create New Subscription
+          Edit Subscription
         </Typography>
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
           {steps.map((label) => (
@@ -186,7 +186,7 @@ export default function EditStepForm() {
         {activeStep === steps.length ? (
           <>
             <Typography variant="h5" gutterBottom>
-              Your new subscription was successfully added!
+              Your subscription was successfully edited!
             </Typography>
             <Stack
               direction="column"
@@ -201,13 +201,6 @@ export default function EditStepForm() {
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 View Subscriptions
-              </Button>
-              <Button
-                onClick={handleCreateAnotherClick}
-                variant="text"
-                sx={{ width: { sm: 300, md: 400, lg: 500 } }}
-              >
-                Create Another Subscription
               </Button>
             </Stack>
           </>
@@ -240,11 +233,11 @@ export default function EditStepForm() {
               )}
               {activeStep === steps.length - 1 ? (
                 <Button
-                  onClick={handleCreateClick}
+                  onClick={handleEditClick}
                   variant="contained"
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  Create
+                  Edit
                 </Button>
               ) : (
                 <Button

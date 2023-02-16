@@ -84,6 +84,30 @@ export const postSubscription = createAsyncThunk("subscriptions/create",
     }
 )
 
+export const patchSubscription = createAsyncThunk("subscriptions/update",
+    async(params, { rejectWithValue }) => {
+        const { token, sub, subId } = params;
+        try {
+            const res = await fetch(`/subscriptions/${subId}`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                body: JSON.stringify(sub)
+            }
+            )
+            const data = await res.json();
+            console.log("Data from PATCH subscription request is: ", data);
+            return data;
+        }
+        catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+)
+
 const subscriptionsSlice = createSlice({
     name: "subscriptions",
     initialState : {
@@ -157,6 +181,24 @@ const subscriptionsSlice = createSlice({
             state.status = "idle";
         },
         [postSubscription.rejected](state, action){
+            console.log(action.payload);
+            state.status = "idle";
+        },
+        [patchSubscription.pending](state){
+            state.status = "loading";
+        },
+        [patchSubscription.fulfilled](state, action){
+            if (action.payload.id){
+                state.subscriptions = state.subscriptions.map((sub) => {
+                    if (sub.id == action.payload.id){
+                        return action.payload;
+                    }
+                    else return sub
+                });
+            }
+            state.status = "idle";
+        },
+        [patchSubscription.rejected](state, action){
             console.log(action.payload);
             state.status = "idle";
         }
