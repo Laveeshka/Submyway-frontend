@@ -1,8 +1,11 @@
 // useEffect & useState
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { createNewPayment, deleteSubscription } from "../redux/subscriptionsSlice";
+import {
+  createNewPayment,
+  deleteSubscription,
+} from "../redux/subscriptionsSlice";
 // navigation
 import { Navigate, useNavigate } from "react-router-dom";
 // @mui
@@ -20,13 +23,14 @@ import {
   Button,
   Popover,
   MenuItem,
-  IconButton
+  IconButton,
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 // components
 import SubscriptionsHeading from "../components/table/SubscriptionsHeading";
 import EnhancedTableHead from "../components/table/EnhanceTableHead";
 import EnhancedTableToolbar from "../components/table/EnhancedTableToolbar";
+import EmptySubscriptionsContainer from "../components/emptyState/subscriptions";
 // data
 import { subscriptionsData } from "../data/tableData";
 
@@ -80,16 +84,16 @@ export default function Subscriptions() {
   const [idForEditOrDelete, setIdForEditOrDelete] = useState(null);
 
   // --------------------------------------------------------------------------
-    
-    const handleOpenMenu = (event, id) => {
-        //console.log("Current target is: ", event.currentTarget);
-        setOpen(event.currentTarget);
-        setIdForEditOrDelete(id);
-    }
 
-    const handleCloseMenu = () => {
-        setOpen(null);
-    }
+  const handleOpenMenu = (event, id) => {
+    //console.log("Current target is: ", event.currentTarget);
+    setOpen(event.currentTarget);
+    setIdForEditOrDelete(id);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
 
   // --------------------------------------------------------------------------
 
@@ -160,154 +164,182 @@ export default function Subscriptions() {
     //console.log("Row id is: ", id);
     const params = { token, id };
     try {
-        const resultAction = dispatch(createNewPayment(params)).unwrap();
-      } catch (err) {
-        console.warn(err);
-      }
-  }
+      const resultAction = dispatch(createNewPayment(params)).unwrap();
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const handleDeleteSubClick = async (event, id) => {
     //console.log("Row id to be deleted is: ", id);
     const params = { token, id };
     try {
-        const resultAction = await dispatch(deleteSubscription(params)).unwrap();
-        if (resultAction.data.message){
-            handleCloseMenu();
-        }
-      } catch (err) {
-        console.warn(err);
+      const resultAction = await dispatch(deleteSubscription(params)).unwrap();
+      if (resultAction.data.message) {
+        handleCloseMenu();
       }
-  }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const handleEditSubClick = (event, id) => {
     navigate(`edit/${id}`);
-  }
+  };
 
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
     <>
-    <Container>
-      <SubscriptionsHeading addSubscriptionClick={addSubscriptionClick} />
-      <Box sx={{ width: "100%" }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} />
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size="medium"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-              />
-              <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+      {subscriptions.length === 0 ? (
+        <EmptySubscriptionsContainer />
+      ) : (
+        <Container>
+          <SubscriptionsHeading addSubscriptionClick={addSubscriptionClick} />
+          <Box sx={{ width: "100%" }}>
+            <Paper sx={{ width: "100%", mb: 2 }}>
+              <EnhancedTableToolbar numSelected={selected.length} />
+              <TableContainer>
+                <Table
+                  sx={{ minWidth: 750 }}
+                  aria-labelledby="tableTitle"
+                  size="medium"
+                >
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={handleSelectAllClick}
+                    onRequestSort={handleRequestSort}
+                    rowCount={rows.length}
+                  />
+                  <TableBody>
+                    {stableSort(rows, getComparator(order, orderBy))
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row, index) => {
+                        const isItemSelected = isSelected(row.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row.id}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            onClick={(event) => handleClick(event, row.id)}
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                        >
-                          {row.company}
-                        </TableCell>
-                        <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="left">{row.billing}</TableCell>
-                        <TableCell align="right">{row.price}</TableCell>
-                        <TableCell align="left">
-                          {row.nextPaymentDate}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.paid ? (
-                            "Payment made"
-                          ) : (
-                            <Button variant="outlined" size="small" onClick={(event) => handleNewPaymentClick(event, row.id)}>
-                              Pay Now
-                            </Button>
-                          )}
-                        </TableCell>
-                        <TableCell align="right">
-                            <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, row.id)}>
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={row.id}
+                            selected={isItemSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                onClick={(event) => handleClick(event, row.id)}
+                                color="primary"
+                                checked={isItemSelected}
+                                inputProps={{
+                                  "aria-labelledby": labelId,
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                            >
+                              {row.company}
+                            </TableCell>
+                            <TableCell align="left">{row.status}</TableCell>
+                            <TableCell align="left">{row.billing}</TableCell>
+                            <TableCell align="right">{row.price}</TableCell>
+                            <TableCell align="left">
+                              {row.nextPaymentDate}
+                            </TableCell>
+                            <TableCell align="left">
+                              {row.paid ? (
+                                "Payment made"
+                              ) : (
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={(event) =>
+                                    handleNewPaymentClick(event, row.id)
+                                  }
+                                >
+                                  Pay Now
+                                </Button>
+                              )}
+                            </TableCell>
+                            <TableCell align="right">
+                              <IconButton
+                                size="large"
+                                color="inherit"
+                                onClick={(event) =>
+                                  handleOpenMenu(event, row.id)
+                                }
+                              >
                                 <MoreVertIcon />
-                            </IconButton>
-                     </TableCell>
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    {emptyRows > 0 && (
+                      <TableRow
+                        style={{
+                          height: 53 * emptyRows,
+                        }}
+                      >
+                        <TableCell colSpan={6} />
                       </TableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: 53 * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </Box>
-    </Container>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </Box>
+        </Container>
+      )}
 
-    <Popover
+      <Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{
-            sx: {
-                p: 1,
-                width: 140,
-                '& .MuiMenuItem-root': {
-                    px: 1,
-                    typography: 'body2',
-                    borderRadius: 0.75
-                }
-            }
-        }}>
-        <MenuItem onClick={(event) => handleEditSubClick(event, idForEditOrDelete)}>Edit</MenuItem>
-        <MenuItem onClick={(event) => handleDeleteSubClick(event, idForEditOrDelete)}>Delete</MenuItem>
-    </Popover>
+          sx: {
+            p: 1,
+            width: 140,
+            "& .MuiMenuItem-root": {
+              px: 1,
+              typography: "body2",
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem
+          onClick={(event) => handleEditSubClick(event, idForEditOrDelete)}
+        >
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={(event) => handleDeleteSubClick(event, idForEditOrDelete)}
+        >
+          Delete
+        </MenuItem>
+      </Popover>
     </>
   );
 }
