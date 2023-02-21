@@ -69,6 +69,28 @@ export const editCompany = createAsyncThunk(
   }
 );
 
+export const deleteCompany = createAsyncThunk(
+  "companies/delete",
+  async (params, { rejectWithValue }) => {
+    const { token, id } = params;
+    try {
+      const res = await fetch(`/companies/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("Data from DELETE company is: ", data);
+      return { data, id };
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const companiesSlice = createSlice({
   name: "companies",
   initialState: {
@@ -124,10 +146,24 @@ const companiesSlice = createSlice({
       }
       state.status = "idle";
     },
-    [editCompany.rejected](state, action) {
+    [editCompany.rejected](state, action){
       console.log(action.payload);
       state.status = "idle";
     },
+    [deleteCompany.pending](state) {
+      state.status = "loading";
+    },
+    [deleteCompany.fulfilled](state, action){
+      const data = action.payload.data;
+      const companyId = action.payload.id;
+      if (data.message){
+        state.companies = state.companies.filter((company) => company.id != companyId)
+      }
+      state.status = "idle";
+    },
+    [deleteCompany.rejected](state, action){
+
+    }
   },
 });
 

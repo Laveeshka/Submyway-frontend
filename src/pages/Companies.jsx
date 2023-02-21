@@ -1,5 +1,6 @@
 // redux
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCompany } from "../redux/companiesSlice";
 // navigation
 import { Navigate, Link as RouterLink } from "react-router-dom";
 // @mui
@@ -12,42 +13,54 @@ import { FixedSizeList } from "react-window";
 
 // --------------------------------------------------------------------------
 
-const Row = ({ index, style, data }) => {
-    console.log("row data is: ", data[index]);
-    return (
-        <ListItem 
-            style={style} 
-            key={index}
-            secondaryAction={
-                <>
-                <IconButton 
-                    to={`edit/${data[index].id}`}
-                    component={RouterLink}
-                    edge="end" 
-                    sx={{ mr: 1 }}
-                >
-                    <EditIcon />
-                </IconButton>
-                <IconButton 
-                    edge="end"
-                >
-                    <DeleteIcon />
-                </IconButton>
-                </>
-            }
-            >
-        <ListItemText primary={data[index].name}/>
-    </ListItem>
-    )};
-
-// --------------------------------------------------------------------------
-
 export default function Companies(){
 
     //retrieve state from store
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     let companies = useSelector((state) => state.companies.companies);
-    console.log("Companies are: ", companies.length);
+    const token = useSelector((state) => state.user.token);
+    const dispatch = useDispatch();
+
+    const Row = ({ index, style, data }) => {
+        console.log("row data is: ", data[index]);
+        return (
+            <ListItem 
+                style={style} 
+                key={index}
+                secondaryAction={
+                    <>
+                    <IconButton 
+                        to={`edit/${data[index].id}`}
+                        component={RouterLink}
+                        edge="end" 
+                        sx={{ mr: 1 }}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton 
+                        edge="end"
+                        onClick={(event) => handleDeleteClick(event, data[index].id)}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                    </>
+                }
+                >
+            <ListItemText primary={data[index].name}/>
+        </ListItem>
+        )};
+
+    const handleDeleteClick = async (event, id) => {
+        const params = { token, id }
+        try {
+            const resultAction = await dispatch(deleteCompany(params)).unwrap();
+            console.log("resultAction is: ", resultAction);
+        }
+        catch (err){
+            console.warn(err);
+        }
+    }
+
     if (!isLoggedIn) return <Navigate to="/login"/>
 
     // render the companies in a virtualised list
