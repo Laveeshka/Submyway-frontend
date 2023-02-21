@@ -34,7 +34,6 @@ import EmptySubscriptionsContainer from "../components/emptyState/subscriptions"
 import ConfirmationDialog from "../components/dialog/ConfirmationDialog";
 // data
 import { subscriptionsData } from "../data/tableData";
-import { set } from "date-fns";
 
 // --------------------------------------------------------------------------
 
