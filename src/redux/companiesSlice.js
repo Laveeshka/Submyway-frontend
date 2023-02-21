@@ -11,7 +11,7 @@ export const getCompanies = createAsyncThunk("companies/get",
                 }
             })
             const data = await res.json();
-            //console.log("Data from GET companies request is: ", data);
+            console.log("Data from GET companies request is: ", data);
             return data;
         }
         catch (err) {

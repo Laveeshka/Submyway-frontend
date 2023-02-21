@@ -13,7 +13,7 @@ import { FixedSizeList } from "react-window";
 // --------------------------------------------------------------------------
 
 const Row = ({ index, style, data }) => {
-    // console.log("data is: ", data)
+    console.log("row data is: ", data[index]);
     return (
         <ListItem 
             style={style} 
@@ -46,8 +46,8 @@ export default function Companies(){
 
     //retrieve state from store
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    const companies = useSelector((state) => state.companies.companies);
-
+    let companies = useSelector((state) => state.companies.companies);
+    console.log("Companies are: ", companies.length);
     if (!isLoggedIn) return <Navigate to="/login"/>
 
     // render the companies in a virtualised list
@@ -60,9 +60,9 @@ export default function Companies(){
             </Stack>
             <Card sx={{ width: "100%" }}>
                 <CardHeader title="Companies" sx={{ textAlign: "start" }}/>
-                    <Paper sx={{ width: "100%",height: {xs: 200, md: 300, lg: 400} }}>
+                    <Paper sx={{ width: "100%",height: 500 }}>
                         <FixedSizeList
-                            height={400}
+                            height={500}
                             width="lg"
                             itemData={companies}
                             itemSize={80}
