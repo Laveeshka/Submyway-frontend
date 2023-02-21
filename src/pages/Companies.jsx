@@ -3,17 +3,32 @@ import { useSelector } from "react-redux"
 // navigation
 import { Navigate } from "react-router-dom";
 // @mui
-import { Container, Stack, Card, CardHeader, Button, Paper, ListItem, ListItemText } from "@mui/material";
+import { Container, Stack, Card, CardHeader, Button, Paper, ListItem, ListItemText, IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 // components
 import { FixedSizeList } from "react-window";
 
 // --------------------------------------------------------------------------
 
 const Row = ({ index, style, data }) => {
-    console.log("data is: ", data)
+    // console.log("data is: ", data)
     return (
-        <ListItem style={style} key={index}>
+        <ListItem 
+            style={style} 
+            key={index}
+            secondaryAction={
+                <>
+                <IconButton edge="end" sx={{ mr: 1 }}>
+                    <EditIcon />
+                </IconButton>
+                <IconButton edge="end">
+                    <DeleteIcon />
+                </IconButton>
+                </>
+            }
+            >
         <ListItemText primary={data[index].name}/>
     </ListItem>
     )};

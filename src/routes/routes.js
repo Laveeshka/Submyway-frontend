@@ -1,7 +1,6 @@
 import { Navigate, useRoutes } from "react-router-dom"
 // layouts
 import DashboardLayout from "../layout/dashboard/DashboardLayout";
-import SimpleLayout from "../layout/SimpleLayout";
 import Dashboard from "../pages/Dashboard";
 import Subscriptions from "../pages/Subscriptions";
 import Companies from "../pages/Companies";
@@ -10,6 +9,8 @@ import Register from "../pages/Register";
 import NotFound404 from "../pages/NotFound404";
 import CreateSub from "../subpages/CreateSub";
 import EditSub from "../subpages/EditSub";
+import CreateCompany from "../subpages/CreateCompany";
+import EditCompany from "../subpages/EditCompany";
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +27,11 @@ export default function Router() {
                     {path: "create", element: <CreateSub />},
                     {path: "edit/:id", element: <EditSub />}
                 ]},
-                {path: "companies", element: <Companies />}
+                {path: "companies", children: [
+                    {element: <Companies />, index: true},
+                    {path: "create", element: <CreateCompany />},
+                    {path: "edit/:companyId", element: <EditCompany />}
+                ]}
             ]
         },
         {path: '/login', element: <Login />},
