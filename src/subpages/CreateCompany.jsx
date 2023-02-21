@@ -1,7 +1,8 @@
 // state
 import { useState } from "react";
 // redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { createCompany } from "../redux/companiesSlice";
 // navigate
 import { Navigate } from "react-router-dom";
 // components
@@ -15,7 +16,6 @@ import {
   Typography,
   Button,
   Stack,
-  Box,
 } from "@mui/material";
 
 // --------------------------------------------------------------------------
@@ -23,14 +23,26 @@ import {
 export default function CreateCompany() {
   // state
   const [name, setName] = useState("");
-  const [errors, setErrors] = useState([]);
+  //const [errors, setErrors] = useState([]);
 
   // retrieve state from redux store
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const token = useSelector((state) => state.user.token);
+  let errors = useSelector((state) => state.companies.errors)
+  const dispatch = useDispatch();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     //console.log("submit button was clicked")
+    const params = { token, name };
+    try {
+        const resultAction = await dispatch(createCompany(params)).unwrap();
+        console.log("resultAction is: ", resultAction);
+
+    }
+    catch (err){
+        console.warn(err);
+    }
   };
 
   // navigate user to login page if not authenticated
@@ -42,6 +54,20 @@ export default function CreateCompany() {
         <Typography variant="h4" align="center" sx={{ mb: 4 }}>
           Create New Company
         </Typography>
+        <List sx={{ listStyleType: "disc", pl: 3 }}>
+              {errors.map((err) => (
+                <ListItem
+                  sx={{
+                    color: (theme) => theme.palette["error"].main,
+                    display: "list-item",
+                    typography: "subtitle2",
+                  }}
+                  key={err}
+                >
+                  {err}
+                </ListItem>
+              ))}
+            </List>
         <Stack
           direction="column"
           justifyContent="center"
