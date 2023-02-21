@@ -1,7 +1,7 @@
 // redux
 import { useSelector } from "react-redux"
 // navigation
-import { Navigate } from "react-router-dom";
+import { Navigate, Link as RouterLink } from "react-router-dom";
 // @mui
 import { Container, Stack, Card, CardHeader, Button, Paper, ListItem, ListItemText, IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -20,10 +20,17 @@ const Row = ({ index, style, data }) => {
             key={index}
             secondaryAction={
                 <>
-                <IconButton edge="end" sx={{ mr: 1 }}>
+                <IconButton 
+                    to={`edit/${data[index].id}`}
+                    component={RouterLink}
+                    edge="end" 
+                    sx={{ mr: 1 }}
+                >
                     <EditIcon />
                 </IconButton>
-                <IconButton edge="end">
+                <IconButton 
+                    edge="end"
+                >
                     <DeleteIcon />
                 </IconButton>
                 </>
@@ -49,7 +56,7 @@ export default function Companies(){
         <>
         <Container maxWidth="lg">
             <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ mb: 4 }}>
-                <Button variant="contained" startIcon={<AddIcon />}>New Company</Button>
+                <Button to="create" component={RouterLink} variant="contained" startIcon={<AddIcon />}>New Company</Button>
             </Stack>
             <Card sx={{ width: "100%" }}>
                 <CardHeader title="Companies" sx={{ textAlign: "start" }}/>
