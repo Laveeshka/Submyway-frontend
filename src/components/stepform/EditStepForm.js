@@ -22,6 +22,7 @@ import { useState } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { patchSubscription } from "../../redux/subscriptionsSlice";
+import { findOrCreateCompany } from "../../redux/companiesSlice";
 // date
 import parseISO from "date-fns/parseISO";
 // navigation
@@ -109,49 +110,76 @@ export default function EditStepForm({ subscription }) {
   const handleEditClick = async () => {
     const errs = [];
     setErrors([]);
-    console.log("Create button was clicked");
+    console.log("Edit button was clicked");
     if (company.length === 0) {
       errs.push("The company cannot be blank");
     }
     if (price <= 0) {
       errs.push("The price cannot be a zero or negative value");
     }
-    // const startDateInString = format(startDate, "dd MMM yyyy");
-    // const parsedStartDate = parse(startDateInString, "dd MMM yyyy", startDate);
-    // const todayInString = format(new Date(), "dd MMM yyyy");
-    // const parsedToday = parse(todayInString, "dd MMM yyyy", new Date());
-
-    // if (parsedStartDate < parsedToday) {
-    //   errs.push("Start date cannot be in the past");
-    // }
     setErrors(errs);
     //fire the dispatch action here
-    if (errors.length === 0) {
-      console.log("Okay for PATCH request");
-      const companyObj = companies.find((val) => val.name === company);
-      const companyId = companyObj.id;
-      const sub = {
-        company_id: companyId,
-        start_date: startDate.toISOString(),
-        status: active,
-        pricing: price,
-        frequency: 1,
-        billing,
-      };
-      console.log(sub);
-      const subId = subscription.id;
-      const params = { token, sub, subId };
-      try {
-        const resultAction = await dispatch(patchSubscription(params)).unwrap();
-        console.log(resultAction);
-        if (resultAction.id) {
-          console.log("works");
-          setActiveStep((prev) => ++prev);
+    if (errs.length === 0) {
+      console.log("Okay for POST find_or_create_company request");
+      try{
+        const params = { token, company };
+        const resultAction = await dispatch(findOrCreateCompany(params)).unwrap();
+        console.log("Result from POST find_or_create_company is: ", resultAction);
+        if (resultAction.id){
+          console.log("Okay for PATCH request");
+          const companyId = resultAction.id;
+          const sub = {
+            company_id: companyId,
+            start_date: startDate.toISOString(),
+            status: active,
+            pricing: price,
+            frequency: 1,
+            billing,
+          };
+          try {
+            const subId = subscription.id;
+            const subParams = { token, sub, subId };
+            const patchResultAction = await dispatch(patchSubscription(subParams)).unwrap();
+            console.log("Result from PATCH subscription is: ", patchResultAction);
+            if (patchResultAction.id) {
+              console.log("works");
+              setActiveStep((prev) => ++prev);
+            }
+          } catch (err) {
+            console.warn(err);
+          }
         }
-      } catch (err) {
+      }
+      catch (err){
         console.warn(err);
       }
     }
+    // if (errs.length === 0) {
+    //   console.log("Okay for PATCH request");
+    //   const companyObj = companies.find((val) => val.name === company);
+    //   const companyId = companyObj.id;
+    //   const sub = {
+    //     company_id: companyId,
+    //     start_date: startDate.toISOString(),
+    //     status: active,
+    //     pricing: price,
+    //     frequency: 1,
+    //     billing,
+    //   };
+    //   console.log(sub);
+    //   const subId = subscription.id;
+    //   const params = { token, sub, subId };
+    //   try {
+    //     const resultAction = await dispatch(patchSubscription(params)).unwrap();
+    //     console.log(resultAction);
+    //     if (resultAction.id) {
+    //       console.log("works");
+    //       setActiveStep((prev) => ++prev);
+    //     }
+    //   } catch (err) {
+    //     console.warn(err);
+    //   }
+    // }
   };
 
   const handleViewSubscriptionsClick = () => {

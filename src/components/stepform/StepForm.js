@@ -175,7 +175,6 @@ export default function StepForm() {
     setErrors(errs);
     if (errs.length === 0) {
       console.log("Okay for POST find_or_create_company request");
-      console.log("Company is: ", company);
       try{
         const params = { token, company };
         const resultAction = await dispatch(findOrCreateCompany(params)).unwrap();
