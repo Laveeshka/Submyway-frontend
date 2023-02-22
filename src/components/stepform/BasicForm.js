@@ -12,6 +12,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  Autocomplete
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -47,7 +48,19 @@ export default function BasicForm({
               alignSelf: "flex-start",
             }}
           >
-            <InputLabel id="company-label">Company</InputLabel>
+            <Autocomplete
+              id="company-autocomplete"
+              freeSolo
+              inputValue={company}
+              onInputChange={(event, newInputValue) => {
+                setCompany(newInputValue);
+                console.log("Company value: ", company);
+              }}
+              options={companies.map((option) => option.name)}
+              renderInput={(params) => <TextField {...params} label="Company" helperText="Choose from existing list companies. Entering a company name outside of the list will create a new company"/>}
+            />
+
+            {/* <InputLabel id="company-label">Company</InputLabel>
             <Select
               labelId="company-label"
               id="company-select"
@@ -59,7 +72,7 @@ export default function BasicForm({
               {companies.map((company) => (
                 <MenuItem key={company.name} value={company.name}>{company.name}</MenuItem>
               ))}
-            </Select>
+            </Select> */}
           </FormControl>
         </Grid>
         <Grid item xs={12}>

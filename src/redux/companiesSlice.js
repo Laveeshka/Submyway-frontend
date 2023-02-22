@@ -91,6 +91,31 @@ export const deleteCompany = createAsyncThunk(
   }
 );
 
+export const findOrCreateCompany = createAsyncThunk(
+  "companies/find_or_create",
+  async (params, { rejectWithValue }) => {
+    const { token, company } = params;
+    const name = company;
+    console.log(name)
+    try {
+      const res = await fetch("/find_or_create_company", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
+      const data = await res.json();
+      console.log("Data from find_or_create_company is: ", data);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const companiesSlice = createSlice({
   name: "companies",
   initialState: {
@@ -162,7 +187,28 @@ const companiesSlice = createSlice({
       state.status = "idle";
     },
     [deleteCompany.rejected](state, action){
-
+      console.log(action.payload);
+      state.status = "idle";
+    },
+    [findOrCreateCompany.pending](state) {
+      state.status = "loading";
+    },
+    [findOrCreateCompany.fulfilled](state, action) {
+      if (action.payload.id) {
+        const found = state.companies.map(c => c.id).includes(action.payload.id);
+        console.log("Found is: ", found);
+        if (!found) {
+          state.companies.push(action.payload);
+        }
+        state.errors = [];
+      } else {
+        state.errors = action.payload.errors;
+      }
+      state.status = "idle";
+    },
+    [findOrCreateCompany.rejected](state, action) {
+      console.log(action.payload);
+      state.status = "idle";
     }
   },
 });

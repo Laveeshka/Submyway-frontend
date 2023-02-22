@@ -22,6 +22,7 @@ import { useState } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { postSubscription } from "../../redux/subscriptionsSlice";
+import { findOrCreateCompany } from "../../redux/companiesSlice";
 // date
 import parse from "date-fns/parse";
 import { format } from "date-fns";
@@ -107,6 +108,52 @@ export default function StepForm() {
     setActiveStep((prev) => ++prev);
   };
 
+  // const handleCreateClick = async () => {
+  //   const errs = [];
+  //   setErrors([]);
+  //   console.log("Create button was clicked");
+  //   if (company.length === 0) {
+  //     errs.push("The company cannot be blank");
+  //   }
+  //   if (price <= 0) {
+  //     errs.push("The price cannot be a zero or negative value");
+  //   }
+  //   const startDateInString = format(startDate, "dd MMM yyyy");
+  //   const parsedStartDate = parse(startDateInString, "dd MMM yyyy", startDate);
+  //   const todayInString = format(new Date(), "dd MMM yyyy");
+  //   const parsedToday = parse(todayInString, "dd MMM yyyy", new Date());
+
+  //   if (parsedStartDate < parsedToday) {
+  //     errs.push("Start date cannot be in the past");
+  //   }
+  //   setErrors(errs);
+  //   if (errors.length === 0) {
+  //     console.log("Okay for POST request");
+  //     const companyObj = companies.find((val) => val.name === company);
+  //     const companyId = companyObj.id;
+  //     const newSub = {
+  //       company_id: companyId,
+  //       start_date: startDate.toISOString(),
+  //       status: active,
+  //       pricing: price,
+  //       frequency: 1,
+  //       billing,
+  //     };
+  //     console.log(newSub);
+  //     const params = { token, newSub };
+  //     try {
+  //       const resultAction = await dispatch(postSubscription(params)).unwrap();
+  //       console.log(resultAction);
+  //       if (resultAction.id) {
+  //         console.log("works");
+  //         setActiveStep((prev) => ++prev);
+  //       }
+  //     } catch (err) {
+  //       console.warn(err);
+  //     }
+  //   }
+  // };
+
   const handleCreateClick = async () => {
     const errs = [];
     setErrors([]);
@@ -126,33 +173,44 @@ export default function StepForm() {
       errs.push("Start date cannot be in the past");
     }
     setErrors(errs);
-    //fire the dispatch action here
-    if (errors.length === 0) {
-      console.log("Okay for POST request");
-      const companyObj = companies.find((val) => val.name === company);
-      const companyId = companyObj.id;
-      const newSub = {
-        company_id: companyId,
-        start_date: startDate.toISOString(),
-        status: active,
-        pricing: price,
-        frequency: 1,
-        billing,
-      };
-      console.log(newSub);
-      const params = { token, newSub };
-      try {
-        const resultAction = await dispatch(postSubscription(params)).unwrap();
-        console.log(resultAction);
-        if (resultAction.id) {
-          console.log("works");
-          setActiveStep((prev) => ++prev);
+    if (errs.length === 0) {
+      console.log("Okay for POST find_or_create_company request");
+      console.log("Company is: ", company);
+      try{
+        const params = { token, company };
+        const resultAction = await dispatch(findOrCreateCompany(params)).unwrap();
+        console.log("Result from POST find_or_create_company is: ", resultAction);
+        if (resultAction.id){
+          console.log("Okay for POST request");
+          const companyId = resultAction.id;
+          const newSub = {
+            company_id: companyId,
+            start_date: startDate.toISOString(),
+            status: active,
+            pricing: price,
+            frequency: 1,
+            billing,
+          };
+          console.log(newSub);
+          try {
+            const newSubParams = { token, newSub };
+            const postResultAction = await dispatch(postSubscription(newSubParams)).unwrap();
+            console.log("Result from POST subscription is: ", postResultAction);
+            if (postResultAction.id) {
+              console.log("works");
+              setActiveStep((prev) => ++prev);
+            }
+          } catch (err) {
+            console.warn(err);
+          }
         }
-      } catch (err) {
+      }
+      catch (err){
         console.warn(err);
       }
     }
   };
+
 
   const handleViewSubscriptionsClick = () => {
     navigate("/subscriptions");
