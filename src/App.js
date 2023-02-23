@@ -12,8 +12,6 @@ function App() {
   //retrieve state and actions from store
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const token = useSelector((state) => state.user.token);
-  let subscriptions = useSelector((state) => state.subscriptions.subscriptions);
-  console.log("Subscriptions are: ", subscriptions)
   const dispatch = useDispatch();
 
   useEffect(() => {

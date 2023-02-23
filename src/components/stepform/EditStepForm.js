@@ -45,10 +45,14 @@ export default function EditStepForm({ subscription }) {
   const token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
+  const subscription_payments = subscription.subscription_payments;
+  const lastPayment = subscription_payments[subscription_payments.length - 1];
+  const lastPaymentDate = lastPayment.next_payment_date;
+
   const [activeStep, setActiveStep] = useState(0);
   // states for form inputs
   const [company, setCompany] = useState(subscription.company.name);
-  const [startDate, setStartDate] = useState(parseISO(subscription.start_date));
+  const [startDate, setStartDate] = useState(parseISO(lastPaymentDate));
   const [active, setActive] = useState(subscription.status);
   const [price, setPrice] = useState(subscription.pricing);
   const [billing, setBilling] = useState(subscription.billing);
@@ -154,46 +158,11 @@ export default function EditStepForm({ subscription }) {
         console.warn(err);
       }
     }
-    // if (errs.length === 0) {
-    //   console.log("Okay for PATCH request");
-    //   const companyObj = companies.find((val) => val.name === company);
-    //   const companyId = companyObj.id;
-    //   const sub = {
-    //     company_id: companyId,
-    //     start_date: startDate.toISOString(),
-    //     status: active,
-    //     pricing: price,
-    //     frequency: 1,
-    //     billing,
-    //   };
-    //   console.log(sub);
-    //   const subId = subscription.id;
-    //   const params = { token, sub, subId };
-    //   try {
-    //     const resultAction = await dispatch(patchSubscription(params)).unwrap();
-    //     console.log(resultAction);
-    //     if (resultAction.id) {
-    //       console.log("works");
-    //       setActiveStep((prev) => ++prev);
-    //     }
-    //   } catch (err) {
-    //     console.warn(err);
-    //   }
-    // }
   };
 
   const handleViewSubscriptionsClick = () => {
     navigate("/subscriptions");
   }
-
-  // const handleCreateAnotherClick = () => {
-  //   setActiveStep(0);
-  //   setCompany("");
-  //   setPrice(0);
-  //   setActive(true);
-  //   setBilling(cycles[0]);
-  //   setStartDate(new Date());
-  // }
 
   return (
     <Container component="form" maxWidth="lg" sx={{ mb: 4 }}>

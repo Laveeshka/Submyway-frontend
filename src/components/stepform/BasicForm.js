@@ -84,13 +84,13 @@ export default function BasicForm({
               }}
             >
               <DatePicker
-                label="Start date"
+                label="Next payment date"
                 value={startDate}
                 onChange={(newValue) => {
                   setStartDate(newValue);
                   console.log("Start date is: ", startDate)
                 }}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params} helperText="This is the next payment date that you will be charged for the subscription"/>}
               />
             </FormControl>
           </LocalizationProvider>
