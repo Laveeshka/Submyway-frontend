@@ -89,7 +89,7 @@ export default function EditCompany(){
                               variant="text"
                               sx={{ width: { sm: 300, md: 400, lg: 500 } }}
                             >
-                              Edit Same Company
+                              Edit Company Again
                             </Button>
                           </Stack>
                         </>

@@ -157,7 +157,6 @@ const companiesSlice = createSlice({
     },
     [editCompany.fulfilled](state, action) {
       if (action.payload.id) {
-        //state.companies.push(action.payload);
         state.companies = state.companies.map((company) => {
           if (company.id == action.payload.id) {
             return action.payload;

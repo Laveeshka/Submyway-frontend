@@ -38,7 +38,7 @@ export default function Router() {
                 {path: "categories", children: [
                     {element: <Categories />, index: true},
                     {path: "create", element: <CreateCategory />},
-                    {path: "edit/categoryId", element: <EditCategory />}
+                    {path: "edit/:categoryId", element: <EditCategory />}
                 ]}
             ]
         },

@@ -65,6 +65,31 @@ export const getCategories = createAsyncThunk(
     }
   );
 
+  export const editCategory = createAsyncThunk(
+    "categories/edit",
+    async (params, { rejectWithValue }) => {
+      const { token, title, color, categoryId } = params;
+      const id = categoryId;
+      console.log(id);
+      try {
+        const res = await fetch(`/categories/${id}`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ title, color }),
+        });
+        const data = await res.json();
+        console.log("Data from PATCH categories is: ", data);
+        return data;
+      } catch (err) {
+        return rejectWithValue(err.message);
+      }
+    }
+  );
+
 const categoriesSlice = createSlice({
     name: "categories",
     initialState: {
@@ -115,6 +140,28 @@ const categoriesSlice = createSlice({
           state.status = "idle";
         },
         [createCategory.rejected](state, action) {
+          console.log(action.payload);
+          state.status = "idle";
+        },
+        [editCategory.pending](state) {
+          state.status = "loading";
+        },
+        [editCategory.fulfilled](state, action) {
+          if (action.payload.id) {
+            state.categories = state.categories.map((cat) => {
+              if (cat.id == action.payload.id) {
+                return action.payload;
+              } else {
+                return cat;
+              }
+            });
+            state.errors = [];
+          } else {
+            state.errors = action.payload.errors;
+          }
+          state.status = "idle";
+        },
+        [editCategory.rejected](state, action){
           console.log(action.payload);
           state.status = "idle";
         }
