@@ -142,6 +142,9 @@ const companiesSlice = createSlice({
     [createCompany.fulfilled](state, action) {
       if (action.payload.id) {
         state.companies.push(action.payload);
+        state.companies.sort(
+          (c1, c2) => (c1.name.toUpperCase() < c2.name.toUpperCase()) ? -1 : (c1.name.toUpperCase() > c2.name.toUpperCase()) ? 1 : 0
+        )
         state.errors = [];
       } else {
         state.errors = action.payload.errors;

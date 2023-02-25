@@ -119,6 +119,17 @@ const subscriptionsSlice = createSlice({
          //sync action for logging out user
          clearOnLogout(state, action) {
             state.subscriptions = [];
+        },
+        //sync action for deleting subscriptions based on deleted company
+        deleteSubsFromCompanies(state, action) {
+            console.log("Action payload is: ", action.payload)
+            const companyId = action.payload;
+            state.subscriptions = state.subscriptions.filter((sub) => {
+                const subCompanyId = sub.company.id;
+                if (companyId != subCompanyId){
+                    return sub;
+                }
+            })
         }
     },
     extraReducers: {
@@ -204,6 +215,6 @@ const subscriptionsSlice = createSlice({
         }
     }
 })
-export const { clearOnLogout } = subscriptionsSlice.actions;
+export const { clearOnLogout, deleteSubsFromCompanies } = subscriptionsSlice.actions;
 
 export default subscriptionsSlice.reducer;

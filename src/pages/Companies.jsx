@@ -10,6 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 // components
 import { FixedSizeList } from "react-window";
+import { deleteSubsFromCompanies } from "../redux/subscriptionsSlice";
 
 // --------------------------------------------------------------------------
 
@@ -54,7 +55,12 @@ export default function Companies(){
         const params = { token, id }
         try {
             const resultAction = await dispatch(deleteCompany(params)).unwrap();
-            // console.log("resultAction is: ", resultAction);
+            console.log("result action is: ", resultAction);
+            //trigger delete subscriptions if dispatch is successful
+            if (resultAction.data.message){
+                console.log("OKAY to delete associated subs");
+                dispatch(deleteSubsFromCompanies(id));
+            }
         }
         catch (err){
             console.warn(err);
