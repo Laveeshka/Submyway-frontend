@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubscriptions } from "./redux/subscriptionsSlice";
 import { getCompanies } from './redux/companiesSlice';
+import { getCategories } from './redux/categoriesSlice';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       try {
         dispatch(getSubscriptions(token)).unwrap();
         dispatch(getCompanies(token)).unwrap();
+        dispatch(getCategories(token)).unwrap();
       } catch (err) {
         console.warn(err);
       }

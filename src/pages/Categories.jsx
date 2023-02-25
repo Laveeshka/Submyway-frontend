@@ -1,6 +1,6 @@
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCompany } from "../redux/companiesSlice";
+import { deleteCategory } from "../redux/categoriesSlice";
 // navigation
 import { Navigate, Link as RouterLink } from "react-router-dom";
 // @mui
@@ -13,16 +13,16 @@ import { FixedSizeList } from "react-window";
 
 // --------------------------------------------------------------------------
 
-export default function Companies(){
+export default function Categories(){
 
-    //retrieve state from store
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    let companies = useSelector((state) => state.companies.companies);
-    const token = useSelector((state) => state.user.token);
-    const dispatch = useDispatch();
+     //retrieve state from store
+     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+     let categories = useSelector((state) => state.categories.categories) || [];
+     const token = useSelector((state) => state.user.token);
+     const dispatch = useDispatch();
 
-    const Row = ({ index, style, data }) => {
-        // console.log("row data is: ", data[index]);
+     const row = ({ index, style, data }) => {
+        console.log("row data is: ", data[index]);
         return (
             <ListItem 
                 style={style} 
@@ -46,40 +46,41 @@ export default function Companies(){
                     </>
                 }
                 >
-            <ListItemText primary={data[index].name}/>
+            <ListItemText primary={data[index].title}/>
         </ListItem>
         )};
 
-    const handleDeleteClick = async (event, id) => {
-        const params = { token, id }
-        try {
-            const resultAction = await dispatch(deleteCompany(params)).unwrap();
-            // console.log("resultAction is: ", resultAction);
+        const handleDeleteClick = async (event, id) => {
+            const params = { token, id }
+            try {
+                const resultAction = await dispatch(deleteCategory(params)).unwrap();
+                console.log("resultAction is: ", resultAction);
+            }
+            catch (err){
+                console.warn(err);
+            }
         }
-        catch (err){
-            console.warn(err);
-        }
-    }
-
-    if (!isLoggedIn) return <Navigate to="/login"/>
+    
+        if (!isLoggedIn) return <Navigate to="/login"/>
+    
 
     return(
         <>
         <Container maxWidth="lg">
             <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ mb: 4 }}>
-                <Button to="create" component={RouterLink} variant="contained" startIcon={<AddIcon />}>New Company</Button>
+                <Button to="create" component={RouterLink} variant="contained" startIcon={<AddIcon />}>New Category</Button>
             </Stack>
             <Card sx={{ width: "100%" }}>
-                <CardHeader title="Companies" sx={{ textAlign: "start" }}/>
+                <CardHeader title="Categories" sx={{ textAlign: "start" }}/>
                     <Paper sx={{ width: "100%",height: 500 }}>
                         <FixedSizeList
                             height={500}
                             width="lg"
-                            itemData={companies}
+                            itemData={categories}
                             itemSize={80}
-                            itemCount={companies.length}
+                            itemCount={categories.length}
                         >
-                            {Row}
+                            {row}
                         </FixedSizeList>
                     </Paper>
             </Card>

@@ -11,6 +11,9 @@ import CreateSub from "../subpages/CreateSub";
 import EditSub from "../subpages/EditSub";
 import CreateCompany from "../subpages/CreateCompany";
 import EditCompany from "../subpages/EditCompany";
+import Categories from "../pages/Categories";
+import CreateCategory from "../subpages/CreateCategory";
+import EditCategory from "../subpages/EditCategory";
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +34,11 @@ export default function Router() {
                     {element: <Companies />, index: true},
                     {path: "create", element: <CreateCompany />},
                     {path: "edit/:companyId", element: <EditCompany />}
+                ]},
+                {path: "categories", children: [
+                    {element: <Categories />, index: true},
+                    {path: "create", element: <CreateCategory />},
+                    {path: "edit/categoryId", element: <EditCategory />}
                 ]}
             ]
         },

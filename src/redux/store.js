@@ -7,6 +7,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import userReducer from "./userSlice";
 import subscriptionsReducer from "./subscriptionsSlice";
 import companiesReducer from "./companiesSlice";
+import categoriesReducer from "./categoriesSlice";
 
 const persistConfig = {
   key: 'root',
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   companies: companiesReducer,
   subscriptions: subscriptionsReducer,
+  categories: categoriesReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

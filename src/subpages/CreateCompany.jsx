@@ -34,7 +34,6 @@ export default function CreateCompany() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //console.log("submit button was clicked")
     const params = { token, name, };
     try {
         const resultAction = await dispatch(createCompany(params)).unwrap();

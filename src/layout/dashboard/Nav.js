@@ -2,6 +2,7 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import CategoryIcon from '@mui/icons-material/Category';
 // built-in typechecking
 import PropTypes from "prop-types";
 // hooks
@@ -43,6 +44,11 @@ const navConfig = [
     path: "/companies",
     icon: <BusinessCenterIcon />,
   },
+  {
+    title: "categories",
+    path: "/categories",
+    icon: <CategoryIcon />,
+  }
 ];
 
 // ----------------------------------------------------------------------
