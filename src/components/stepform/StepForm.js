@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { postSubscription } from "../../redux/subscriptionsSlice";
 import { findOrCreateCompany } from "../../redux/companiesSlice";
+import { postSubCategory } from "../../redux/subscriptionsSlice";
 // date
 import parse from "date-fns/parse";
 import { format } from "date-fns";
@@ -43,12 +44,14 @@ export default function StepForm() {
   const theme = useTheme();
   //retrieve state and actions from store
   const companies = useSelector((state) => state.companies.companies);
+  const categories = useSelector((state) => state.categories.categories);
   const token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
   const [activeStep, setActiveStep] = useState(0);
   // states for form inputs
   const [company, setCompany] = useState("");
+  const [category, setCategory] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [active, setActive] = useState(true);
   const [price, setPrice] = useState(0);
@@ -64,11 +67,14 @@ export default function StepForm() {
           <BasicForm
             setCompany={setCompany}
             company={company}
+            category={category}
+            setCategory={setCategory}
             startDate={startDate}
             setStartDate={setStartDate}
             active={active}
             setActive={setActive}
             companies={companies}
+            categories={categories}
           />
         );
       case 1:
@@ -85,6 +91,7 @@ export default function StepForm() {
         return (
           <ReviewForm
             company={company}
+            category={category}
             startDate={startDate}
             active={active}
             price={price}
@@ -149,7 +156,17 @@ export default function StepForm() {
             const newSubParams = { token, newSub };
             const postResultAction = await dispatch(postSubscription(newSubParams)).unwrap();
             console.log("Result from POST subscription is: ", postResultAction);
+            
+
             if (postResultAction.id) {
+              // trigger dispatch action to create SubscriptionCategory if category value is not empty
+            if (category.length > 0){
+              const catId = categories.find((cat) => cat.title === category).id;
+              const newSubCategory = { subscription_id: postResultAction.id, category_id:  catId}
+              const newSubCatParams = { token, newSubCategory }
+              const postSubCatResult = await dispatch(postSubCategory(newSubCatParams)).unwrap();
+              console.log("Result from POST sub category is: ", postSubCatResult);
+            }
               console.log("works");
               setActiveStep((prev) => ++prev);
             }

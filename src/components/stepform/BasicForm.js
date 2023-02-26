@@ -11,28 +11,33 @@ import {
   TextField,
   FormGroup,
   FormControlLabel,
+  FormHelperText,
   Checkbox,
-  Autocomplete
+  Autocomplete,
 } from "@mui/material";
+import Link from '@mui/material/Link';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// navigation
+import { Link as RouterLink } from "react-router-dom";
 
 // --------------------------------------------------------------------------
 
 export default function BasicForm({
   setCompany,
   company,
+  category,
+  setCategory,
   startDate,
   setStartDate,
   active,
   setActive,
-  companies
+  companies,
+  categories,
 }) {
- 
-
-  const handleCompanyChange = (event) => {
-    setCompany(event.target.value);
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
   };
 
   return (
@@ -57,22 +62,44 @@ export default function BasicForm({
                 console.log("Company value: ", company);
               }}
               options={companies.map((option) => option.name)}
-              renderInput={(params) => <TextField {...params} label="Company" helperText="Choose from existing list companies. Entering a company name outside of the list will create a new company"/>}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Company"
+                  helperText="Choose from existing list of companies. Entering a company name outside of the list will create a new company"
+                />
+              )}
             />
-
-            {/* <InputLabel id="company-label">Company</InputLabel>
-            <Select
-              labelId="company-label"
-              id="company-select"
-              value={company}
-              label="Company"
-              onChange={handleCompanyChange}
-              sx={{textAlign: "start"}}
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl
+            sx={{
+              display: "flex",
+              alignSelf: "flex-start",
+            }}
+          >
+            <InputLabel
+              id="category-label"
             >
-              {companies.map((company) => (
-                <MenuItem key={company.name} value={company.name}>{company.name}</MenuItem>
+              Category
+            </InputLabel>
+            <Select
+              labelId="category-label"
+              id="category-select"
+              value={category}
+              label="Category"
+              onChange={handleCategoryChange}
+              sx={{ textAlign: "start" }}
+            >
+              {categories.map((cat) => (
+                <MenuItem key={cat.id} value={cat.title}>
+                  {cat.title}
+                </MenuItem>
               ))}
-            </Select> */}
+              <MenuItem value=""><em>None</em></MenuItem>
+            </Select>
+            <FormHelperText>Choose from existing list of categories. <Link component={RouterLink} to="/categories/create">Click here to add a new category</Link></FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
@@ -80,7 +107,7 @@ export default function BasicForm({
             <FormControl
               sx={{
                 display: "flex",
-                alignSelf: "flex-start"
+                alignSelf: "flex-start",
               }}
             >
               <DatePicker
@@ -88,9 +115,14 @@ export default function BasicForm({
                 value={startDate}
                 onChange={(newValue) => {
                   setStartDate(newValue);
-                  console.log("Start date is: ", startDate)
+                  console.log("Start date is: ", startDate);
                 }}
-                renderInput={(params) => <TextField {...params} helperText="This is the next payment date that you will be charged for the subscription"/>}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    helperText="This is the next payment date that you will be charged for the subscription"
+                  />
+                )}
               />
             </FormControl>
           </LocalizationProvider>

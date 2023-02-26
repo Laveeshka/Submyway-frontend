@@ -9,6 +9,7 @@ export default function ReviewForm({
   active,
   price,
   billing,
+  category
 }) {
   return (
     <>
@@ -27,6 +28,21 @@ export default function ReviewForm({
             ) : (
               <Typography variant="body2" color="error">
                 Not chosen
+              </Typography>
+            )}
+          </Typography>
+        </ListItem>
+        <ListItem key={category} sx={{ py: 1, px: 0 }}>
+          <ListItemText
+            primary="Category"
+            secondary="The category associated with the subscription service"
+          />
+          <Typography variant="body2">
+            {category.length > 0 ? (
+              category
+            ) : (
+              <Typography variant="body2">
+                None
               </Typography>
             )}
           </Typography>

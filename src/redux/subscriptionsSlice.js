@@ -108,6 +108,80 @@ export const patchSubscription = createAsyncThunk("subscriptions/update",
     }
 )
 
+export const postSubCategory = createAsyncThunk("subscription_categories/create",
+    async(params, { rejectWithValue }) => {
+        const { token, newSubCategory } = params;
+        try {
+            const res = await fetch("/subscription_categories", {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                body: JSON.stringify(newSubCategory)
+            }
+            )
+            const data = await res.json();
+            console.log("Data from POST subscription categories request is: ", data);
+            return data;
+        }
+        catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+)
+
+export const deleteSubCategory = createAsyncThunk("subscription_categories/delete",
+    async(params, { rejectWithValue }) => {
+        const { token, subId, subCatId } = params;
+        const id = subCatId;
+        try {
+            const res = await fetch(`/subscription_categories/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+            }
+            )
+            const data = await res.json();
+            console.log("Data from DELETE subscription category request is: ", data);
+            return {data, subId};
+        }
+        catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+)
+
+export const patchSubCategory = createAsyncThunk("subscription_categories/update",
+    async(params, { rejectWithValue }) => {
+        const { token, subCat, subCatId } = params;
+        const id = subCatId
+        try {
+            const res = await fetch(`/subscription_categories/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                body: JSON.stringify(subCat)
+            }
+            )
+            const data = await res.json();
+            console.log("Data from PATCH subscription category request is: ", data);
+            return data;
+        }
+        catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+)
+
+
 const subscriptionsSlice = createSlice({
     name: "subscriptions",
     initialState : {
@@ -210,6 +284,68 @@ const subscriptionsSlice = createSlice({
             state.status = "idle";
         },
         [patchSubscription.rejected](state, action){
+            console.log(action.payload);
+            state.status = "idle";
+        },
+        [postSubCategory.pending](state){
+            state.status = "loading";
+        },
+        [postSubCategory.fulfilled](state, action){
+            if (action.payload.id){
+                //add sub category to subscription
+                const subId = action.payload.subscription_id;
+                state.subscriptions = state.subscriptions.map((sub) => {
+                    if (subId === sub.id){
+                        sub.categories = [action.payload.category]
+                        return sub;
+                    }
+                    return sub;
+                })
+            }
+            state.status = "idle";
+        },
+        [postSubCategory.rejected](state, action){
+            console.log(action.payload);
+            state.status = "idle";
+        },
+        [deleteSubCategory.pending](state){
+            state.status = "loading";
+        },
+        [deleteSubCategory.fulfilled](state, action){
+            if (action.payload.data.message){
+                const id = action.payload.subId;
+                state.subscriptions = state.subscriptions.map((sub) => {
+                    if (sub.id === id) {
+                        sub.categories = []
+                        return sub;
+                    } 
+                    return sub;
+                });
+            }
+            state.status = "idle";
+        },
+        [deleteSubCategory.rejected](state, action){
+            console.log(action.payload);
+            state.status = "idle";
+        },
+        [patchSubCategory.pending](state){
+            state.status = "loading";
+        },
+        [patchSubCategory.fulfilled](state, action){
+            if (action.payload.id){
+                //update sub category of subscription
+                const subId = action.payload.subscription_id;
+                state.subscriptions = state.subscriptions.map((sub) => {
+                    if (subId === sub.id){
+                        sub.categories = [action.payload.category]
+                        return sub;
+                    }
+                    return sub;
+                })
+            }
+            state.status = "idle";
+        },
+        [patchSubCategory.rejected](state, action){
             console.log(action.payload);
             state.status = "idle";
         }
