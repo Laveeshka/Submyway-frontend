@@ -38,10 +38,23 @@ import { subscriptionsData } from "../data/tableData";
 // --------------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  let valueA = a[orderBy]
+  let valueB = b[orderBy]
+
+  //check orderBy
+  if(orderBy === 'nextPaymentDate'){
+    valueA = new Date(valueA)
+    valueB = new Date(valueB)
+  }
+  //check type
+  if (typeof valueA === 'string' && typeof valueB === 'string'){
+    valueA = valueA.toUpperCase()
+    valueB = valueB.toUpperCase()
+  }
+  if (valueB < valueA) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (valueB > valueA) {
     return 1;
   }
   return 0;

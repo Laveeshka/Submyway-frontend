@@ -53,7 +53,7 @@ export const headCells = [
         label: "Price"
     },
     {
-        id: 'next-payment-date',
+        id: 'nextPaymentDate',
         numeric: false,
         disablePadding: false,
         label: "Next Payment Date"
