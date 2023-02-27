@@ -87,6 +87,7 @@ export default function Subscriptions() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const token = useSelector((state) => state.user.token);
   let subscriptions = useSelector((state) => state.subscriptions.subscriptions);
+  const categories = useSelector((state) => state.categories.categories);
   let rows = [];
   const navigate = useNavigate();
 
@@ -98,6 +99,7 @@ export default function Subscriptions() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [idForEditOrDelete, setIdForEditOrDelete] = useState(null);
+  const [filteredRows, setFilteredRows] = useState(subscriptionsData(subscriptions) || []);
 
   // --------------------------------------------------------------------------
 
@@ -216,6 +218,17 @@ export default function Subscriptions() {
     navigate(`edit/${id}`);
   };
 
+  const onCategoriesChange = (categoriesSelected) => {
+    console.log(categoriesSelected.length)
+    const categoryValues = categoriesSelected.length > 0 ? categoriesSelected.map((cat) => cat) : [];
+    console.log(categoryValues);
+    setFilteredRows(rows.filter((row) => {
+      if (categoryValues.includes(row.category) || categoryValues.length === 0){
+        return row;
+      }
+    }))
+  }
+
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
@@ -224,7 +237,7 @@ export default function Subscriptions() {
         <EmptySubscriptionsContainer />
       ) : (
         <Container>
-          <SubscriptionsHeading addSubscriptionClick={addSubscriptionClick} />
+          <SubscriptionsHeading addSubscriptionClick={addSubscriptionClick} categories={categories.map((cat => cat.title)) || []} onCategoriesChange={onCategoriesChange}/>
           <Box sx={{ width: "100%" }}>
             <Paper sx={{ width: "100%", mb: 2 }}>
               <EnhancedTableToolbar numSelected={selected.length} />
@@ -243,7 +256,7 @@ export default function Subscriptions() {
                     rowCount={rows.length}
                   />
                   <TableBody>
-                    {stableSort(rows, getComparator(order, orderBy))
+                    {stableSort(filteredRows, getComparator(order, orderBy))
                       .slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
