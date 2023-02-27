@@ -55,7 +55,7 @@ export const headCells = [
         label: "Price"
     },
     {
-        id: 'cateogy',
+        id: 'category',
         numeric: false,
         disablePadding: false,
         label: "Category"

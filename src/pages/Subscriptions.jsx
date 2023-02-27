@@ -40,6 +40,7 @@ import { subscriptionsData } from "../data/tableData";
 function descendingComparator(a, b, orderBy) {
   let valueA = a[orderBy]
   let valueB = b[orderBy]
+  //console.log(`a is ${valueA} and b is ${valueB} and orderBy is ${orderBy}`)
 
   //check orderBy
   if(orderBy === 'nextPaymentDate'){
