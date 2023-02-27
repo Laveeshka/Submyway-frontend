@@ -281,6 +281,7 @@ export default function Subscriptions() {
                             <TableCell align="left">{row.status}</TableCell>
                             <TableCell align="left">{row.billing}</TableCell>
                             <TableCell align="right">{row.price}</TableCell>
+                            <TableCell align="center">{row.category}</TableCell>
                             <TableCell align="left">
                               {row.nextPaymentDate}
                             </TableCell>
@@ -316,7 +317,7 @@ export default function Subscriptions() {
                     {emptyRows > 0 && (
                       <TableRow
                         style={{
-                          height: 53 * emptyRows,
+                          height: 20 * emptyRows,
                         }}
                       >
                         <TableCell colSpan={6} />

@@ -6,6 +6,7 @@ function createData(subscription){
     const subscription_payments = subscription.subscription_payments;
     const lastPayment = subscription_payments[subscription_payments.length - 1];
     const formattedDate = format(parseISO(lastPayment.next_payment_date), 'dd MMM yyyy');
+    const category = typeof subscription.categories[0] === 'undefined' ? "-" : subscription.categories[0].title
     console.log("Formatted date is: ", formattedDate);
     return {
         id: subscription.id,
@@ -14,6 +15,7 @@ function createData(subscription){
         billing: subscription.billing,
         price: subscription.pricing,
         nextPaymentDate: formattedDate,
+        category: category,
         paid: lastPayment.paid,
     }
 }
@@ -51,6 +53,12 @@ export const headCells = [
         numeric: true,
         disablePadding: false,
         label: "Price"
+    },
+    {
+        id: 'cateogy',
+        numeric: false,
+        disablePadding: false,
+        label: "Category"
     },
     {
         id: 'nextPaymentDate',
