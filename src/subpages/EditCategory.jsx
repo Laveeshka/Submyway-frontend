@@ -3,6 +3,7 @@ import { useState } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { editCategory } from "../redux/categoriesSlice";
+import { updateSubsCategory } from "../redux/subscriptionsSlice";
 // navigate
 import {
   useNavigate,
@@ -56,6 +57,7 @@ export default function EditCategory() {
         const resultAction = await dispatch(editCategory(params)).unwrap();
         console.log("resultAction is: ", resultAction);
         if (resultAction.id){
+            dispatch(updateSubsCategory(resultAction));
             setErr([]);
             setEdited(true);
         } else {

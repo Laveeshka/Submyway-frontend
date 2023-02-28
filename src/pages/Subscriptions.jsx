@@ -24,14 +24,17 @@ import {
   Popover,
   MenuItem,
   IconButton,
+  Chip
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useTheme } from "@mui/system";
 // components
 import SubscriptionsHeading from "../components/table/SubscriptionsHeading";
 import EnhancedTableHead from "../components/table/EnhanceTableHead";
 import EnhancedTableToolbar from "../components/table/EnhancedTableToolbar";
 import EmptySubscriptionsContainer from "../components/emptyState/subscriptions";
 import ConfirmationDialog from "../components/dialog/ConfirmationDialog";
+import { complementaryColor } from "../utils/complementaryColor";
 // data
 import { subscriptionsData } from "../data/tableData";
 
@@ -87,9 +90,10 @@ export default function Subscriptions() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const token = useSelector((state) => state.user.token);
   let subscriptions = useSelector((state) => state.subscriptions.subscriptions);
-  const categories = useSelector((state) => state.categories.categories);
+  let categories = useSelector((state) => state.categories.categories);
   let rows = [];
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const [open, setOpen] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
@@ -100,6 +104,22 @@ export default function Subscriptions() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [idForEditOrDelete, setIdForEditOrDelete] = useState(null);
   const [filteredRows, setFilteredRows] = useState(subscriptionsData(subscriptions) || []);
+
+  // --------------------------------------------------------------------------
+
+  const categoryColor = (title) => {
+    if (title.length !== 0){
+      // find category based on title and return its color value
+      const cat = categories.find((cat) => cat.title === title);
+      return cat.color;
+    } else {
+      return theme.palette.primary.main;
+    }
+  }
+
+  const categoryTextColor = (primaryColor) => {
+    return complementaryColor(primaryColor);
+  }
 
   // --------------------------------------------------------------------------
 
@@ -295,7 +315,10 @@ export default function Subscriptions() {
                             <TableCell align="left">{row.status}</TableCell>
                             <TableCell align="left">{row.billing}</TableCell>
                             <TableCell align="right">{row.price}</TableCell>
-                            <TableCell align="center">{row.category}</TableCell>
+                            <TableCell align="center">{row.category === "" ? row.category : <Chip label={row.category} sx={{
+                              backgroundColor: categoryColor(row.category),
+                              color: complementaryColor(categoryColor(row.category))
+                            }}/>}</TableCell>
                             <TableCell align="left">
                               {row.nextPaymentDate}
                             </TableCell>

@@ -1,6 +1,7 @@
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCategory } from "../redux/categoriesSlice";
+import { deleteSubsCategory } from "../redux/subscriptionsSlice";
 // navigation
 import { Navigate, Link as RouterLink } from "react-router-dom";
 // @mui
@@ -55,6 +56,10 @@ export default function Categories(){
             try {
                 const resultAction = await dispatch(deleteCategory(params)).unwrap();
                 console.log("resultAction is: ", resultAction);
+                if (resultAction.data.message){
+                    //dispatch delete subscription category action
+                    dispatch(deleteSubsCategory(resultAction.id));
+                }
             }
             catch (err){
                 console.warn(err);

@@ -204,6 +204,27 @@ const subscriptionsSlice = createSlice({
                     return sub;
                 }
             })
+        },
+        //sync action for updating subscription category based on updated category
+        updateSubsCategory(state, action){
+            const catId = action.payload.id;
+            state.subscriptions = state.subscriptions.map((sub) => {
+                if (sub.categories[0] && sub.categories[0].id === catId){
+                    sub.categories[0] = action.payload;
+                }
+                return sub;
+            })
+
+        },
+        //sync action for deleting subscription category based on deleted category
+        deleteSubsCategory(state, action){
+            const catId = action.payload;
+            state.subscriptions = state.subscriptions.map((sub) => {
+                if (sub.categories[0] && sub.categories[0].id === catId){
+                    sub.categories = [];
+                }
+                return sub;
+            })
         }
     },
     extraReducers: {
@@ -351,6 +372,6 @@ const subscriptionsSlice = createSlice({
         }
     }
 })
-export const { clearOnLogout, deleteSubsFromCompanies } = subscriptionsSlice.actions;
+export const { clearOnLogout, deleteSubsFromCompanies, updateSubsCategory, deleteSubsCategory } = subscriptionsSlice.actions;
 
 export default subscriptionsSlice.reducer;
