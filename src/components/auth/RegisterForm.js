@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 // @mui
 import {
   Link,
@@ -10,7 +10,7 @@ import {
   InputAdornment,
   TextField,
   Button,
-  ListItem
+  ListItem,
 } from "@mui/material";
 // icons
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -18,7 +18,6 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/userSlice";
-
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +35,16 @@ export default function LoginForm() {
   const errors = useSelector((state) => state.user.registerErrors);
 
   const errorListItems = errors.map((error) => (
-    <ListItem key={error}>{error}</ListItem>
+    <ListItem
+      sx={{
+        color: (theme) => theme.palette["error"].main,
+        display: "list-item",
+        typography: "subtitle2",
+      }}
+      key={error}
+    >
+      {error}
+    </ListItem>
   ));
 
   const handleRegisterClick = async (e) => {
@@ -60,13 +68,14 @@ export default function LoginForm() {
   };
 
   const handlePasswordVisibilityClick = () => {
-    console.log("Did someone call for an eye-con?")
+    console.log("Did someone call for an eye-con?");
     setShowPassword(!showPassword);
-  }
+  };
 
   return (
     <>
       <Stack spacing={3}>
+      <List sx={{ listStyleType: "disc", pl: 3 }}>{errorListItems}</List>
         <TextField
           name="username"
           label="Username"
@@ -84,10 +93,7 @@ export default function LoginForm() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={handlePasswordVisibilityClick}
-                  edge="end"
-                >
+                <IconButton onClick={handlePasswordVisibilityClick} edge="end">
                   {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
               </InputAdornment>
@@ -103,10 +109,7 @@ export default function LoginForm() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={handlePasswordVisibilityClick}
-                  edge="end"
-                >
+                <IconButton onClick={handlePasswordVisibilityClick} edge="end">
                   {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
               </InputAdornment>
@@ -118,16 +121,21 @@ export default function LoginForm() {
         <Button
           fullWidth
           variant="contained"
+          color="secondary"
           size="large"
           type="submit"
           onClick={handleRegisterClick}
         >
           Register
         </Button>
-        <Link component={RouterLink} variant="subtitle2" underline="hover" to="/login">
-            Already have an account? Log in here
+        <Link
+          component={RouterLink}
+          variant="subtitle2"
+          underline="hover"
+          to="/login"
+        >
+          Already have an account? Log in here
         </Link>
-        <List>{errorListItems}</List>
       </Stack>
     </>
   );

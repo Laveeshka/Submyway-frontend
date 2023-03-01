@@ -63,7 +63,9 @@ NavSection.propTypes = {
             bgcolor: 'action.selected',
             fontWeight: 'fontWeightBold',
           },
-        }}
+          "& .MuiTouchRipple-child": {
+            backgroundColor: "primary.main",
+        }}}
       >
         <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
   

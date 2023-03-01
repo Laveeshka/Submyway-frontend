@@ -11,6 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // components
 import { FixedSizeList } from "react-window";
 import { deleteSubsFromCompanies } from "../redux/subscriptionsSlice";
+import { theme } from "../theme/theme"
 
 // --------------------------------------------------------------------------
 
@@ -34,13 +35,20 @@ export default function Companies(){
                         to={`edit/${data[index].id}`}
                         component={RouterLink}
                         edge="end" 
-                        sx={{ mr: 1 }}
+                        sx={{ mr: 1, color: `${theme.palette.grey[400]}`,
+                        "& .MuiTouchRipple-child": {
+                          backgroundColor: "primary.light",
+                      } }}
                     >
                         <EditIcon />
                     </IconButton>
                     <IconButton 
                         edge="end"
                         onClick={(event) => handleDeleteClick(event, data[index].id)}
+                        sx={{ color: `${theme.palette.grey[400]}`,
+                        "& .MuiTouchRipple-child": {
+                          backgroundColor: "primary.light",
+                      } }}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -73,10 +81,10 @@ export default function Companies(){
         <>
         <Container maxWidth="lg">
             <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ mb: 4 }}>
-                <Button to="create" component={RouterLink} variant="contained" startIcon={<AddIcon />}>New Company</Button>
+                <Button to="create" component={RouterLink} variant="contained" color="secondary" startIcon={<AddIcon />}>New Company</Button>
             </Stack>
             <Card sx={{ width: "100%" }}>
-                <CardHeader title="Companies" sx={{ textAlign: "start" }}/>
+                <CardHeader title="Companies" sx={{ textAlign: "start", color: "primary.main" }}/>
                     <Paper sx={{ width: "100%",height: 500 }}>
                         <FixedSizeList
                             height={500}

@@ -12,7 +12,7 @@ export default function ConfirmationDialog({open, title, content, handleCloseDia
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" color="primary">
         {title}
         </DialogTitle>
         <DialogContent>
@@ -21,8 +21,8 @@ export default function ConfirmationDialog({open, title, content, handleCloseDia
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleNextPayment} autoFocus>
+          <Button onClick={handleCloseDialog} size="small" color="primary">Cancel</Button>
+          <Button color="secondary" variant="contained" onClick={handleNextPayment} autoFocus>
             Confirm
           </Button>
         </DialogActions>

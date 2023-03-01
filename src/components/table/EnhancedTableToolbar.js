@@ -49,6 +49,7 @@ export default function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
           align="left"
+          color="primary"
         >
           Subscriptions
         </Typography>

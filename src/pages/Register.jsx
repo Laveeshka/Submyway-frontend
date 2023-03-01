@@ -25,7 +25,8 @@ const StyledSection = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.primary.contrastText
 }));
 
 const StyledContent = styled("div")(({ theme }) => ({
@@ -56,7 +57,7 @@ export default function Register() {
       ) : null}
       <Container maxWidth="sm">
         <StyledContent>
-            <Typography variant="h4" gutterBottom>Create an account with Submyway</Typography>
+            <Typography variant="h4" color="primary" gutterBottom>Create an account with Submyway</Typography>
             <RegisterForm />
         </StyledContent>
       </Container>

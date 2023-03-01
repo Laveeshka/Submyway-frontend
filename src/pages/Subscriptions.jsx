@@ -27,7 +27,7 @@ import {
   Chip
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useTheme } from "@mui/system";
+import { theme } from "../theme/theme"
 // components
 import SubscriptionsHeading from "../components/table/SubscriptionsHeading";
 import EnhancedTableHead from "../components/table/EnhanceTableHead";
@@ -93,7 +93,6 @@ export default function Subscriptions() {
   let categories = useSelector((state) => state.categories.categories);
   let rows = [];
   const navigate = useNavigate();
-  const theme = useTheme();
 
   const [open, setOpen] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
@@ -328,6 +327,7 @@ export default function Subscriptions() {
                               ) : (
                                 <Button
                                   variant="outlined"
+                                  color="primary"
                                   size="small"
                                   onClick={(event) =>
                                     handleClickOpenDialog(event, row.id)
@@ -340,7 +340,10 @@ export default function Subscriptions() {
                             <TableCell align="right">
                               <IconButton
                                 size="large"
-                                color="inherit"
+                                sx={{ color: `${theme.palette.grey[400]}`,
+                                "& .MuiTouchRipple-child": {
+                                  backgroundColor: "primary.main",
+                              }}}
                                 onClick={(event) =>
                                   handleOpenMenu(event, row.id)
                                 }

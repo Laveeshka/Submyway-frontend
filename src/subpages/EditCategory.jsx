@@ -80,7 +80,7 @@ if (!isLoggedIn) return <Navigate to="/login"/>;
   return (
     <Container component="form" maxWidth="lg" onSubmit={handleSubmit}>
     <Paper sx={{ p: { xs: 2, md: 3, lg: 4 } }}>
-      <Typography variant="h4" align="center" sx={{ mb: 4 }}>
+      <Typography variant="h4" align="center" color="primary" sx={{ mb: 4 }}>
         Edit Category
       </Typography>
       {edited ? (
@@ -99,6 +99,7 @@ if (!isLoggedIn) return <Navigate to="/login"/>;
               to="/categories"
               component={RouterLink}
               variant="contained"
+              color="secondary"
               sx={{ width: { sm: 300, md: 400, lg: 500 } }}
             >
               View Categories
@@ -106,6 +107,7 @@ if (!isLoggedIn) return <Navigate to="/login"/>;
             <Button
               onClick={handleEditAgainClick}
               variant="text"
+              size="small"
               sx={{ width: { sm: 300, md: 400, lg: 500 } }}
             >
               Edit Category Again
@@ -155,7 +157,7 @@ if (!isLoggedIn) return <Navigate to="/login"/>;
               direction="row"
               justifyContent="flex-end"
             >
-              <Button type="submit" variant="contained" color="primary">
+              <Button type="submit" variant="contained" color="secondary">
                 Edit
               </Button>
             </Stack>

@@ -76,7 +76,7 @@ export default function Header({ onOpenNav }) {
         >
           <MenuIcon />
         </IconButton>
-          <Button variant="contained" size="small" onClick={handleLoginButtonClick}>{isLoggedIn ? "Log out" : "Log in"}</Button>
+          <Button variant="contained" color="secondary" size="small" onClick={handleLoginButtonClick}>{isLoggedIn ? "Log out" : "Log in"}</Button>
       </StyledToolbar>
     </StyledAppBar>
   );

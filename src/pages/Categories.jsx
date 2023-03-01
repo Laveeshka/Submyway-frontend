@@ -9,6 +9,7 @@ import { Container, Stack, Card, CardHeader, Button, Paper, ListItem, ListItemTe
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { theme } from "../theme/theme"
 // components
 import { FixedSizeList } from "react-window";
 
@@ -34,13 +35,22 @@ export default function Categories(){
                         to={`edit/${data[index].id}`}
                         component={RouterLink}
                         edge="end" 
-                        sx={{ mr: 1 }}
+                        sx={{ mr: 1, color: `${theme.palette.grey[400]}`,
+                            "& .MuiTouchRipple-child": {
+                                color: "primary.light"
+                            }
+                    }}
                     >
                         <EditIcon />
                     </IconButton>
                     <IconButton 
                         edge="end"
                         onClick={(event) => handleDeleteClick(event, data[index].id)}
+                        sx={{color: `${theme.palette.grey[400]}`,
+                            "&. MuiTouchRipple-child": {
+                                color: "primary.light"
+                            }
+                    }}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -73,10 +83,10 @@ export default function Categories(){
         <>
         <Container maxWidth="lg">
             <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ mb: 4 }}>
-                <Button to="create" component={RouterLink} variant="contained" startIcon={<AddIcon />}>New Category</Button>
+                <Button to="create" component={RouterLink} variant="contained" color="secondary" startIcon={<AddIcon />}>New Category</Button>
             </Stack>
             <Card sx={{ width: "100%" }}>
-                <CardHeader title="Categories" sx={{ textAlign: "start" }}/>
+                <CardHeader title="Categories" sx={{ textAlign: "start", color: "primary.main" }}/>
                     <Paper sx={{ width: "100%",height: 500 }}>
                         <FixedSizeList
                             height={500}

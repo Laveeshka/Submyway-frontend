@@ -203,7 +203,7 @@ export default function EditStepForm({ subscription }) {
         variant="outlined"
         sx={{ my: { xs: 3, md: 6, lg: 9 }, p: { xs: 2, md: 3, lg: 4 } }}
       >
-        <Typography variant="h4" align="center">
+        <Typography variant="h4" align="center" color="primary">
           Edit Subscription
         </Typography>
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
@@ -228,6 +228,7 @@ export default function EditStepForm({ subscription }) {
               <Button
                 onClick={handleViewSubscriptionsClick}
                 variant="contained"
+                color="secondary"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 View Subscriptions
@@ -256,6 +257,8 @@ export default function EditStepForm({ subscription }) {
                 <Button
                   onClick={handleBackClick}
                   variant="text"
+                  color="primary"
+                  size="small"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Back
@@ -265,6 +268,7 @@ export default function EditStepForm({ subscription }) {
                 <Button
                   onClick={handleEditClick}
                   variant="contained"
+                  color="secondary"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Edit
@@ -273,6 +277,7 @@ export default function EditStepForm({ subscription }) {
                 <Button
                   onClick={handleNextClick}
                   variant="contained"
+                  color="secondary"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Next

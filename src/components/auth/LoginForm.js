@@ -30,7 +30,16 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const errors = useSelector((state) => state.user.loginErrors);
   const errorListItems = errors.map((error) => (
-    <ListItem key={error}>{error}</ListItem>
+    <ListItem
+      sx={{
+        color: (theme) => theme.palette["error"].main,
+        display: "list-item",
+        typography: "subtitle2",
+      }}
+      key={error}
+    >
+      {error}
+    </ListItem>
   ));
 
   // navigation
@@ -59,6 +68,7 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
+        <List sx={{ listStyleType: "disc", pl: 3 }}> {errorListItems}</List>
         <TextField
           name="username"
           label="Username"
@@ -88,6 +98,7 @@ export default function LoginForm() {
         <Button
           fullWidth
           variant="contained"
+          color="secondary"
           size="large"
           type="submit"
           onClick={handleLoginClick}
@@ -102,7 +113,6 @@ export default function LoginForm() {
         >
           Don't have an account? Register here
         </Link>
-        <List> {errorListItems}</List>
       </Stack>
     </>
   );

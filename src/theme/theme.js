@@ -4,37 +4,46 @@ import { alpha } from '@mui/material/styles';
 // SETUP COLORS
 const GREY = {
     0: '#FFFFFF',
-    100: '#F9FAFB',
-    200: '#F4F6F8',
-    300: '#DFE3E8',
-    400: '#C4CDD5',
-    500: '#919EAB',
-    600: '#637381',
-    700: '#454F5B',
-    800: '#212B36',
-    900: '#161C24',
+    100: '#f3f3f7',
+    200: '#dbdbe6',
+    300: '#b7b7cc',
+    400: '#a0a0bb',
+    500: '#7c7ca2',
+    600: '#5d5d83',
+    700: '#4c4c6b',
+    800: '#3b3b54',
+    900: '#333348',
   };
   
   const PRIMARY = {
-    lighter: '#D1E9FC',
-    light: '#76B0F1',
-    main: '#2065D1',
-    dark: '#103996',
-    darker: '#061B64',
+    lighter: '#e3c2ff',
+    light: '#c685ff',
+    main: '#a333ff',
+    dark: '#8700f5',
+    darker: '#7000cc',
     contrastText: '#fff',
   };
   
   const SECONDARY = {
-    lighter: '#D6E4FF',
-    light: '#84A9FF',
-    main: '#3366FF',
-    dark: '#1939B7',
-    darker: '#091A7A',
+    lighter: '#9efaeb',
+    light: '#77f8e2',
+    main: '#0ce9c4',
+    dark: '#0ac2a3',
+    darker: '#078872',
+    contrastText: '#44445f',
+  };
+
+  const TERTIARY = {
+    lighter: '#a977f8',
+    light: '#772af4',
+    main: '#5809d7',
+    dark: '#40079d',
+    darker: '#280561',
     contrastText: '#fff',
   };
   
   const INFO = {
-    lighter: '#D0F2FF',
+    lighter: '#c5fcf2',
     light: '#74CAFF',
     main: '#1890FF',
     dark: '#0C53B7',
@@ -75,6 +84,7 @@ export const theme = createTheme({
         common: { black: '#000', white: '#fff' },
         primary: PRIMARY,
         secondary: SECONDARY,
+        tertiary: TERTIARY,
         info: INFO,
         success: SUCCESS,
         warning: WARNING,
@@ -87,17 +97,17 @@ export const theme = createTheme({
           disabled: GREY[500],
         },
         background: {
-          paper: '#fff',
+          paper: GREY[0],
           default: GREY[100],
           neutral: GREY[200],
         },
         action: {
-          active: GREY[600],
-          hover: alpha(GREY[500], 0.08),
-          selected: alpha(GREY[500], 0.16),
-          disabled: alpha(GREY[500], 0.8),
+          active: PRIMARY.main,
+          hover: alpha(PRIMARY.light, 0.08),
+          selected: alpha(PRIMARY.light, 0.16),
+          disabled: alpha(PRIMARY.light, 0.8),
           disabledBackground: alpha(GREY[500], 0.24),
-          focus: alpha(GREY[500], 0.24),
+          focus: alpha(PRIMARY.light, 0.24),
           hoverOpacity: 0.08,
           disabledOpacity: 0.48,
         },

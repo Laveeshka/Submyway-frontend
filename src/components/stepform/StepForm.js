@@ -201,7 +201,7 @@ export default function StepForm() {
         variant="outlined"
         sx={{ my: { xs: 3, md: 6, lg: 9 }, p: { xs: 2, md: 3, lg: 4 } }}
       >
-        <Typography variant="h4" align="center">
+        <Typography variant="h4" align="center" color="primary">
           Create New Subscription
         </Typography>
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
@@ -226,6 +226,7 @@ export default function StepForm() {
               <Button
                 onClick={handleViewSubscriptionsClick}
                 variant="contained"
+                color="secondary"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 View Subscriptions
@@ -233,6 +234,8 @@ export default function StepForm() {
               <Button
                 onClick={handleCreateAnotherClick}
                 variant="text"
+                color="primary"
+                size="small"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 Create Another Subscription
@@ -261,6 +264,8 @@ export default function StepForm() {
                 <Button
                   onClick={handleBackClick}
                   variant="text"
+                  color="primary"
+                  size="small"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Back
@@ -270,6 +275,7 @@ export default function StepForm() {
                 <Button
                   onClick={handleCreateClick}
                   variant="contained"
+                  color="secondary"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Create
@@ -278,6 +284,7 @@ export default function StepForm() {
                 <Button
                   onClick={handleNextClick}
                   variant="contained"
+                  color="secondary"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Next

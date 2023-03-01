@@ -61,7 +61,7 @@ export default function CreateCompany() {
   return (
     <Container component="form" maxWidth="lg" onSubmit={handleSubmit}>
       <Paper sx={{ p: { xs: 2, md: 3, lg: 4 } }}>
-        <Typography variant="h4" align="center" sx={{ mb: 4 }}>
+        <Typography variant="h4" color="primary" align="center" sx={{ mb: 4 }}>
           Create New Company
         </Typography>
         {created ? (
@@ -80,6 +80,7 @@ export default function CreateCompany() {
                           to="/companies"
                           component={RouterLink}
                           variant="contained"
+                          color="secondary"
                           sx={{ width: { sm: 300, md: 400, lg: 500 } }}
                         >
                           View Companies
@@ -87,6 +88,7 @@ export default function CreateCompany() {
                         <Button
                             onClick={handleCreateAnotherClick}
                           variant="text"
+                          size="small"
                           sx={{ width: { sm: 300, md: 400, lg: 500 } }}
                         >
                           Create Another Company
@@ -124,7 +126,7 @@ export default function CreateCompany() {
           sx={{ width: "100%" }}
         />
         <Stack sx={{ width: "100%" }} direction="row" justifyContent="flex-end">
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="secondary">
             Create
           </Button>
         </Stack>

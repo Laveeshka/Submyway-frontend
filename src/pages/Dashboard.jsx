@@ -45,7 +45,7 @@ export default function Dashboard() {
                 icon={<LoyaltyIcon />}
                 title="Total Subscriptions"
                 total={subscriptions.length}
-                color="primary"
+                color="secondary"
               />
             </Grid>
             <Grid item xs={12} md={6} xl={4}>
@@ -53,7 +53,7 @@ export default function Dashboard() {
                 icon={<CalendarMonthIcon />}
                 title="Total Monthly Costs"
                 total={`${calculateMonthlyCost(subscriptions)} AUD`}
-                color="warning"
+                color="tertiary"
               />
             </Grid>
             <Grid item xs={12} md={6} xl={4}>
@@ -61,7 +61,7 @@ export default function Dashboard() {
                 icon={<AttachMoneyIcon />}
                 title="Total Yearly Costs"
                 total={`${calculateYearlyCost(subscriptions)} AUD`}
-                color="error"
+                color="primary"
               />
             </Grid>
           </Grid>

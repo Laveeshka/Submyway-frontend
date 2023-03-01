@@ -67,7 +67,7 @@ export default function CreateCategory() {
   return (
     <Container component="form" maxWidth="lg" onSubmit={handleSubmit}>
       <Paper sx={{ p: { xs: 2, md: 3, lg: 4 } }}>
-        <Typography variant="h4" align="center" sx={{ mb: 4 }}>
+        <Typography variant="h4" color="primary" align="center" sx={{ mb: 4 }}>
           Create New Category
         </Typography>
         {created ? (
@@ -86,6 +86,7 @@ export default function CreateCategory() {
                 to="/categories"
                 component={RouterLink}
                 variant="contained"
+                color="secondary"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 View Categories
@@ -93,6 +94,7 @@ export default function CreateCategory() {
               <Button
                 onClick={handleCreateAnotherClick}
                 variant="text"
+                size="small"
                 sx={{ width: { sm: 300, md: 400, lg: 500 } }}
               >
                 Create Another Category
@@ -142,7 +144,7 @@ export default function CreateCategory() {
                 direction="row"
                 justifyContent="flex-end"
               >
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="secondary">
                   Create
                 </Button>
               </Stack>

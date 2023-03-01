@@ -63,6 +63,7 @@ export default function SubscriptionsHeading({
     >
       <Button
         variant="contained"
+        color="secondary"
         startIcon={<AddIcon />}
         onClick={addSubscriptionClick}
       >
