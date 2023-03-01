@@ -26,7 +26,7 @@ export default function EmptySubscriptionsContainer() {
     return (
         <Container>
             <StyledContent>
-                <Typography variant="h3" paragraph>
+                <Typography variant="h3" color="primary" paragraph>
                     No subscriptions found
                 </Typography>
                 <Typography sx={{ color: 'text.secondary' }}>
@@ -38,7 +38,7 @@ export default function EmptySubscriptionsContainer() {
                     alt="subscription-illustration"
                     sx={{ height: { xs: 200, md: 300, lg: 400 }, mx: 'auto', my: { xs: 2 }}}
                 />
-                <Button to="create" size="large" startIcon={<AddIcon />} variant="contained" component={RouterLink}>  
+                <Button to="create" size="large" color="secondary" startIcon={<AddIcon />} variant="contained" component={RouterLink}>  
                     Add Subscription
                 </Button>
             </StyledContent>

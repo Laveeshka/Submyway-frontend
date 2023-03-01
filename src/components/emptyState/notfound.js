@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Button, Typography, Container, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import illustration from '../../assets/illustrations/4.svg'
+import illustration from '../../assets/illustrations/9.svg'
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ const StyledContent = styled('div')(({ theme}) => ({
 // ----------------------------------------------------------------------
 
 
-export default function EmptyDashboardContainer() {
+export default function NotFoundContainer() {
     return (
         <Container>
             <StyledContent>
@@ -30,7 +30,7 @@ export default function EmptyDashboardContainer() {
                     Nothing to monitor
                 </Typography>
                 <Typography sx={{ color: 'text.secondary' }}>
-                    You don't have any subscriptions recorded yet to monitor. Create them to start tracking!
+                    You've gone off the beaten path. Go back!
                 </Typography>
                 <Box 
                     component="img"
@@ -38,8 +38,8 @@ export default function EmptyDashboardContainer() {
                     alt="dashboard-illustration"
                     sx={{ height: { xs: 200, md: 300, lg: 400 }, mx: 'auto', my: { xs: 2 }}}
                 />
-                <Button to="/subscriptions/create" color="secondary" size="large" startIcon={<AddIcon />} variant="contained" component={RouterLink}>  
-                    Add Subscription
+                <Button to="/" size="large" color="secondary" variant="contained" component={RouterLink}>  
+                    Go Home
                 </Button>
             </StyledContent>
         </Container>
