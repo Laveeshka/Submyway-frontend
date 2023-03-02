@@ -3,7 +3,13 @@ import { Navigate } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
 // @mui
-import { Grid, Container, Typography } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // components
@@ -17,8 +23,6 @@ import EmptyDashboardContainer from "../components/emptyState/dashboard";
 // --------------------------------------------------------------------------
 
 export default function Dashboard() {
-  // theme
-  const theme = useTheme();
 
   // retrieve actions and state from store
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -26,6 +30,15 @@ export default function Dashboard() {
   const subscriptions = useSelector(
     (state) => state.subscriptions.subscriptions
   );
+  const status = useSelector((state) => state.subscriptions.status);
+
+  if (status === "loading") {
+    return (
+      <Stack justifyContent="center" alignItems="center">
+        <CircularProgress color="primary" />
+      </Stack>
+    );
+  }
 
   if (!isLoggedIn) return <Navigate to="/login" />;
 
