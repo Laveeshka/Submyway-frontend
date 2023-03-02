@@ -25,11 +25,12 @@ export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errs, setErrs] = useState([]);
 
   // retrieve actions and state
   const dispatch = useDispatch();
-  const errors = useSelector((state) => state.user.loginErrors);
-  const errorListItems = errors.map((error) => (
+  //const errors = useSelector((state) => state.user.loginErrors);
+  const errorListItems = errs.map((error) => (
     <ListItem
       sx={{
         color: (theme) => theme.palette["error"].main,
@@ -52,9 +53,14 @@ export default function LoginForm() {
     const credentials = { username, password };
     try {
       const resultAction = await dispatch(loginUser(credentials)).unwrap();
+      if (resultAction.message) {
+        setErrs([resultAction.message]);
+      }
+
       if (resultAction.user) {
         setUsername("");
         setPassword("");
+        setErrs([]);
         navigate("/dashboard");
       }
     } catch (err) {}

@@ -26,15 +26,16 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errs, setErrs] = useState([]);
 
   //navigation
   const navigate = useNavigate();
 
   //retrieve state from store
   const dispatch = useDispatch();
-  const errors = useSelector((state) => state.user.registerErrors);
+  let errors = useSelector((state) => state.user.registerErrors);
 
-  const errorListItems = errors.map((error) => (
+  const errorListItems = errs.map((error) => (
     <ListItem
       sx={{
         color: (theme) => theme.palette["error"].main,
@@ -58,10 +59,14 @@ export default function LoginForm() {
 
     try {
       const resultAction = await dispatch(registerUser(credentials)).unwrap();
+      if(resultAction.errors){
+        setErrs(resultAction.errors);
+      }
       if (resultAction.user) {
         setUsername("");
         setPassword("");
         setPasswordConfirmation("");
+        setErrs([]);
         navigate("/login");
       }
     } catch (err) {}
