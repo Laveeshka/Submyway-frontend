@@ -112,4 +112,13 @@ export const theme = createTheme({
           disabledOpacity: 0.48,
         },
     },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: '4rem',
+          }
+        }
+      }
+    }
 })

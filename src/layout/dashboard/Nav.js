@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import useResponsive from "../../hooks/useResponsive";
+import { Link as RouterLink } from "react-router-dom";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
 import {
@@ -23,6 +24,7 @@ import {
 // components
 import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
+import logo from "../../assets/logo/Submyway.svg"
 
 // ----------------------------------------------------------------------
 
@@ -79,6 +81,9 @@ export default function Nav({ openNav, onCloseNav }) {
         },
       }}
     >
+      <Box component={RouterLink} to="/" sx={{ display: "inline-flex", justifyContent: "center", margin: "auto", width: "100%"}}>
+        <Box component="img" src={logo} sx={{  height: 100 }}/>
+      </Box>
       <NavSection data={navConfig} />
     </Scrollbar>
   );
@@ -102,6 +107,7 @@ export default function Nav({ openNav, onCloseNav }) {
               },
             }}
           >
+            
             {renderContent}
           </Drawer>
         ) : (

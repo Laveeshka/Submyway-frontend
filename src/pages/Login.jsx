@@ -25,7 +25,7 @@ const StyledSection = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  backgroundColor: theme.palette.primary.main,
+  backgroundColor: theme.palette.primary.dark,
   color: theme.palette.primary.contrastText
 }));
 
@@ -57,7 +57,7 @@ export default function Login() {
       ) : null}
       <Container maxWidth="sm">
         <StyledContent>
-            <Typography variant="h4" color="primary" gutterBottom>Log in to Submyway</Typography>
+            <Typography variant="h4" gutterBottom>Log in to Submyway</Typography>
             <LoginForm />
         </StyledContent>
       </Container>

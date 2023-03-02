@@ -58,6 +58,7 @@ NavSection.propTypes = {
         component={RouterLink}
         to={path}
         sx={{
+          marginBottom: 1.5,
           '&.active': {
             color: 'text.primary',
             bgcolor: 'action.selected',

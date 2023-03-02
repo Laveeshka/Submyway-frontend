@@ -57,7 +57,7 @@ export default function Register() {
       ) : null}
       <Container maxWidth="sm">
         <StyledContent>
-            <Typography variant="h4" color="primary" gutterBottom>Create an account with Submyway</Typography>
+            <Typography variant="h4" gutterBottom>Create an account with Submyway</Typography>
             <RegisterForm />
         </StyledContent>
       </Container>
