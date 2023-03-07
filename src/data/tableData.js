@@ -2,7 +2,7 @@ import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
 // ----------------------------------------------------------------------
 
-function createData(subscription){
+export const createData = (subscription) => {
     const subscription_payments = subscription.subscription_payments;
     const lastPayment = subscription_payments[subscription_payments.length - 1];
     const formattedDate = format(parseISO(lastPayment.next_payment_date), 'dd MMM yyyy');

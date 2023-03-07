@@ -5,12 +5,13 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogAc
 export default function ConfirmationDialog({open, title, content, handleCloseDialog, handleNextPayment}) {
 
   return (
-    <div>
+    <div data-testid="confirmation-dialog-container">
       <Dialog
         open={open}
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        
       >
         <DialogTitle id="alert-dialog-title" color="primary">
         {title}

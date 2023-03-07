@@ -36,7 +36,7 @@ import EmptySubscriptionsContainer from "../components/emptyState/subscriptions"
 import ConfirmationDialog from "../components/dialog/ConfirmationDialog";
 import { complementaryColor } from "../utils/complementaryColor";
 // data
-import { subscriptionsData } from "../data/tableData";
+import { subscriptionsData, createData } from "../data/tableData";
 
 // --------------------------------------------------------------------------
 
@@ -209,12 +209,22 @@ export default function Subscriptions() {
     navigate("create");
   };
 
-  const handleNewPaymentClick = () => {
+  const handleNewPaymentClick = async () => {
     setOpenDialog(false);
     const id = idForEditOrDelete;
     const params = { token, id };
     try {
-      const resultAction = dispatch(createNewPayment(params)).unwrap();
+      const resultAction = await dispatch(createNewPayment(params)).unwrap();
+      console.log(resultAction)
+      if(resultAction.id){
+        const editedRows = filteredRows.map((row) => {
+          if(row.id === resultAction.id){
+            row = createData(resultAction)
+          }
+          return row
+        })
+        setFilteredRows(editedRows)
+      }
     } catch (err) {
       console.warn(err);
     }

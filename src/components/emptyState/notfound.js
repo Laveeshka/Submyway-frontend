@@ -27,7 +27,7 @@ export default function NotFoundContainer() {
         <Container>
             <StyledContent>
                 <Typography variant="h3" color="primary" paragraph>
-                    Nothing to monitor
+                    Where did you go?
                 </Typography>
                 <Typography sx={{ color: 'text.secondary' }}>
                     You've gone off the beaten path. Go back!

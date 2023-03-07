@@ -82,7 +82,7 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       <Box component={RouterLink} to="/" sx={{ display: "inline-flex", justifyContent: "center", margin: "auto", width: "100%"}}>
-        <Box component="img" src={logo} sx={{  height: 100 }}/>
+        <Box component="img" src={logo} sx={{  width: "80%", height: 100, px: 2 }}/>
       </Box>
       <NavSection data={navConfig} />
     </Scrollbar>

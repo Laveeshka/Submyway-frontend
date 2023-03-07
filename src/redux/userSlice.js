@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { apiBaseUrl } from "../utils/getApiUrl";
 
 //async action for auto-login
 export const autoLoginUser = createAsyncThunk("user/auto_login",
   async(token, { rejectWithValue }) => {
     try {
-      const res = await fetch("/auto_login", {
+      const res = await fetch(`${apiBaseUrl}/auto_login`, {
         method: "POST",
         headers: {
           "Accepts": "application/json",
@@ -26,7 +27,7 @@ export const autoLoginUser = createAsyncThunk("user/auto_login",
 export const loginUser = createAsyncThunk("user/login",
   async(credentials, { rejectWithValue }) => {
     try {
-      const res = await fetch("/login", {
+      const res = await fetch(`${apiBaseUrl}/login`, {
         method: "POST",
         headers: {
           "Accepts": "application/json",
@@ -48,7 +49,7 @@ export const loginUser = createAsyncThunk("user/login",
 export const registerUser = createAsyncThunk("user/register",
   async(credentials, { rejectWithValue }) => {
     try {
-      const res = await fetch("/users", {
+      const res = await fetch(`${apiBaseUrl}/users`, {
         method: "POST",
         headers: {
           "Accepts": "application/json",
