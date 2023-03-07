@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiBaseUrl } from "../utils/getApiUrl";
+
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_SERVER : "http://localhost:3000/api/v1";
 
 //async action for auto-login
 export const autoLoginUser = createAsyncThunk("user/auto_login",
   async(token, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${apiBaseUrl}/auto_login`, {
+      const res = await fetch(`${baseUrl}/auto_login`, {
         method: "POST",
         headers: {
           "Accepts": "application/json",
@@ -27,7 +28,7 @@ export const autoLoginUser = createAsyncThunk("user/auto_login",
 export const loginUser = createAsyncThunk("user/login",
   async(credentials, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${apiBaseUrl}/login`, {
+      const res = await fetch(`${baseUrl}/login`, {
         method: "POST",
         headers: {
           "Accepts": "application/json",
@@ -49,7 +50,7 @@ export const loginUser = createAsyncThunk("user/login",
 export const registerUser = createAsyncThunk("user/register",
   async(credentials, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${apiBaseUrl}/users`, {
+      const res = await fetch(`${baseUrl}/users`, {
         method: "POST",
         headers: {
           "Accepts": "application/json",

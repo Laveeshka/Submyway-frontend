@@ -23,7 +23,7 @@ const StyledIcon = styled('div')(({ theme }) => ({
 SummaryCard.propTypes = {
     color: PropTypes.string,
     title: PropTypes.string.isRequired,
-    total: PropTypes.number.isRequired,
+    total: PropTypes.string.isRequired,
     sx: PropTypes.object,}
 
 export default function SummaryCard({ icon, title, total, color = 'primary', sx, ...other }) {

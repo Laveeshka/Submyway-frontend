@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiBaseUrl } from "../utils/getApiUrl";
+
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_SERVER : "http://localhost:3000/api/v1";
 
 export const getCategories = createAsyncThunk(
     "categories/get",
     async (token, { rejectWithValue }) => {
       try {
-        const res = await fetch(`${apiBaseUrl}/categories`, {
+        const res = await fetch(`${baseUrl}/categories`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -26,7 +27,7 @@ export const getCategories = createAsyncThunk(
     async (params, { rejectWithValue }) => {
       const { token, id } = params;
       try {
-        const res = await fetch(`${apiBaseUrl}/categories/${id}`, {
+        const res = await fetch(`${baseUrl}/categories/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +49,7 @@ export const getCategories = createAsyncThunk(
     async (params, { rejectWithValue }) => {
       const { token, title, color } = params;
       try {
-        const res = await fetch(`${apiBaseUrl}/categories`, {
+        const res = await fetch(`${baseUrl}/categories`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +74,7 @@ export const getCategories = createAsyncThunk(
       const id = categoryId;
       console.log(id);
       try {
-        const res = await fetch(`${apiBaseUrl}/categories/${id}`, {
+        const res = await fetch(`${baseUrl}/categories/${id}`, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,

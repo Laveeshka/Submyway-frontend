@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiBaseUrl } from "../utils/getApiUrl";
+
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_SERVER : "http://localhost:3000/api/v1";
 
 export const getCompanies = createAsyncThunk(
   "companies/get",
   async (token, { rejectWithValue }) => {
     try {
-      const res = await fetch(`${apiBaseUrl}/companies`, {
+      const res = await fetch(`${baseUrl}/companies`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -27,7 +28,7 @@ export const createCompany = createAsyncThunk(
     const { token, name } = params;
     //console.log(name)
     try {
-      const res = await fetch(`${apiBaseUrl}/companies`, {
+      const res = await fetch(`${baseUrl}/companies`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,7 +53,7 @@ export const editCompany = createAsyncThunk(
     const id = companyId;
     console.log(id);
     try {
-      const res = await fetch(`${apiBaseUrl}/companies/${id}`, {
+      const res = await fetch(`${baseUrl}/companies/${id}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,7 +76,7 @@ export const deleteCompany = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     const { token, id } = params;
     try {
-      const res = await fetch(`${apiBaseUrl}/companies/${id}`, {
+      const res = await fetch(`${baseUrl}/companies/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -99,7 +100,7 @@ export const findOrCreateCompany = createAsyncThunk(
     const name = company;
     console.log(name)
     try {
-      const res = await fetch(`${apiBaseUrl}/find_or_create_company`, {
+      const res = await fetch(`${baseUrl}/find_or_create_company`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiBaseUrl } from "../utils/getApiUrl";
+
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_SERVER : "http://localhost:3000/api/v1";
 
 export const getSubscriptions = createAsyncThunk("subscriptions/get", 
     async(token, { rejectWithValue }) => {
         try {
-            const res = await fetch(`${apiBaseUrl}/subscriptions`, {
+            const res = await fetch(`${baseUrl}/subscriptions`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ export const createNewPayment =  createAsyncThunk("subscriptions/new_payment",
     async(params, { rejectWithValue }) => {
         const { token, id } = params;
         try {
-            const res = await fetch(`${apiBaseUrl}/next_payment/${id}`, {
+            const res = await fetch(`${baseUrl}/next_payment/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ export const deleteSubscription = createAsyncThunk("subscriptions/delete",
     async(params, { rejectWithValue }) => {
         const { token, id } = params;
         try {
-            const res = await fetch (`${apiBaseUrl}/subscriptions/${id}`, {
+            const res = await fetch (`${baseUrl}/subscriptions/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -65,7 +66,7 @@ export const postSubscription = createAsyncThunk("subscriptions/create",
     async(params, { rejectWithValue }) => {
         const { token, newSub } = params;
         try {
-            const res = await fetch(`${apiBaseUrl}/subscriptions`, {
+            const res = await fetch(`${baseUrl}/subscriptions`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -89,7 +90,7 @@ export const patchSubscription = createAsyncThunk("subscriptions/update",
     async(params, { rejectWithValue }) => {
         const { token, sub, subId } = params;
         try {
-            const res = await fetch(`${apiBaseUrl}/subscriptions/${subId}`, {
+            const res = await fetch(`${baseUrl}/subscriptions/${subId}`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -113,7 +114,7 @@ export const postSubCategory = createAsyncThunk("subscription_categories/create"
     async(params, { rejectWithValue }) => {
         const { token, newSubCategory } = params;
         try {
-            const res = await fetch(`${apiBaseUrl}/subscription_categories`, {
+            const res = await fetch(`${baseUrl}/subscription_categories`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -138,7 +139,7 @@ export const deleteSubCategory = createAsyncThunk("subscription_categories/delet
         const { token, subId, subCatId } = params;
         const id = subCatId;
         try {
-            const res = await fetch(`${apiBaseUrl}/subscription_categories/${id}`, {
+            const res = await fetch(`${baseUrl}/subscription_categories/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -162,7 +163,7 @@ export const patchSubCategory = createAsyncThunk("subscription_categories/update
         const { token, subCat, subCatId } = params;
         const id = subCatId
         try {
-            const res = await fetch(`${apiBaseUrl}/subscription_categories/${id}`, {
+            const res = await fetch(`${baseUrl}/subscription_categories/${id}`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`,

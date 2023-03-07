@@ -57,7 +57,7 @@ export default function Dashboard() {
               <SummaryCard
                 icon={<LoyaltyIcon />}
                 title="Total Subscriptions"
-                total={subscriptions.length}
+                total={`${subscriptions.length}`}
                 color="secondary"
               />
             </Grid>
